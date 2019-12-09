@@ -1,0 +1,6 @@
+[submodule "components/optiga-trust-m"]
+	path = components/optiga-trust-m
+	url = https://github.com/Infineon/optiga-trust-m.git
+[submodule "components/azure-iot-sdk-c"]
+	path = components/azure-iot-sdk-c
+	url = https://github.com/Azure/azure-iot-sdk-c.git
