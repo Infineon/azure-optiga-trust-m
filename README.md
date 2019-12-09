@@ -1,4 +1,4 @@
-# Example integration of the Infineon OPTIGA&trade; Trust M with the Microsoft Azure IoT on ESP32
+# Microsoft Azure IoT Integration with the Infineon OPTIGA&trade; Trust M 
 
 ## Description
 
@@ -10,7 +10,8 @@ This repository contains one of Application Notes for OPTIGA™ Trust M security
 
 ## Hardware and Software
 
-## How we use the OPTIGA™ Trust X with the mbedTLS
+* Espessif [ESP32 DevKitC](https://www.espressif.com/en/products/hardware/esp32-devkitc/overview)
+* S2GO Security [OPTIGA™ Trust M ](https://www.infineon.com/cms/en/product/evaluation-boards/s2go-security-optiga-m/)
 
 ## Contributing
 Please read [CONTRIBUTING.md](https://github.com/Infineon/arduino-optiga-trust-x/blob/master/CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
