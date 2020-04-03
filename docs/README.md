@@ -9,17 +9,13 @@ to use OPTIGA™ Trust M hardware secure element based cryptographic functionali
 2. [OPTIGA™ Trust M Integration to mbedTLS](#paragraph2)<br>
     2.1 [Initialization API's](#initialization)<br>
     2.2 [Cryptographic API's](#Cryptofunctions)<br>
-    - [ECDH Functions](#ecdh)<br>
-    - [ECDSA Functions](#ecdsa) <br>
-    - [RSA Functions](#rsa)<br>
-
+   
 ## 1. About this Document <a name="introduction"></a>
 The aim of this document is to describe the porting details of OPTIGA™ Trust M into mbedTLS software crypto library on any hardware platform (e.g. microcontroller,
 single board computer, PC etc.). In this porting guide ESP32 is used as a
 sample reference board to demonstrate the porting steps.
 
 ### 2. OPTIGA™ Trust M Integration to mbedTLS<a name="subparagraph1"></a>
-
 
 The functions that are need to be integrated to mbedTLS are defined below.<br>
 
@@ -34,9 +30,15 @@ The functions that are need to be integrated to mbedTLS are defined below.<br>
     This is used as call back function to return the API execution status after the operation is completed
     asynchronously.
 
-    - [void read_certificate(char * cert_pem, uint16_t * cert_pem_length)]()<br>
+    - [void read_certificate_from_optiga(char * cert_pem, uint16_t * cert_pem_length)]()<br>
     This API reads DER encoded device certificate stored in OPTIGA™ security chip and converts to PEM encoding
 format.
+
+   - [void read_trust_anchor_from_optiga(uint16_t oid, char * cert_pem, uint16_t * cert_pem_length)]()<br>
+   This API reads the data from trust anchor oid.
+   
+   -[static void write_optiga_trust_anchor(void)]()<br>
+   This API writes the trust anchor to OPTIGA™ trust anchor OID.
 
     - [static void write_data_object (uint16_t oid, const uint8_t * p_data, uint16_t
     length)]()<br>
@@ -47,19 +49,20 @@ format.
     This API initializes the OPTIGA™ security chip by calling the open application. It also must write the device
     certificate to the Security chip.
 
-    For more information refer [example_optiga_util_read_data.c](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/optiga/example_optiga_util_read_data.c)) and [example_optiga_util_write_data.c](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/optiga/example_optiga_util_write_data.c))
+    For more information refer [example_optiga_util_read_data.c](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/optiga/example_optiga_util_read_data.c) and [example_optiga_util_write_data.c](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/optiga/example_optiga_util_write_data.c)
 
 #
 
 #### 2.2 Cryptographic API's <a name="Cryptofunctions"></a>
 
-This section has the cryptographic API's related to ECDH, ECDSA and RSA.
+mbedTLS is a crypto library used in FreeRTOS to perform TLS Handshke (secure channel establishment). This library uses an interface, which allows to substitute some of it's functionality by third-party crypto implemementations. Trust M substitutes standard software crypto implemementation for FreeRTOS/mbedTLS for such functions as: ECDSA, ECDHE,RSA.
 
-- #### ECDH Functions <br><a name="ecdh"></a>
+- #### ECDH
     Create all the below mentioned APIs in  “trustm_ecdh.c” file and move file under directory [mbedTLSPort](https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port).
     Entire “trustm_ecdh.c” file must be guarded under
-    macro [MBEDTLS_ECDH_C](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdh.c/#L31)
-
+    macro [MBEDTLS_ECDH_C](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdh.c/#L31)<br>
+    Here we are porting ECDH key pair geneartion and shared secret computation API's.
+  
     - [#define OPTIGA_TRUSTM_KEYID_TO_STORE_SHARED_SECRET  0xE103](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdh.c/#L49)
     <br>This macro defines the session oid used to store shared secret genearted
     - [static void    optiga_lib_status_crypt_event_completed_status;](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdh.c/#L49)<br>
@@ -92,19 +95,20 @@ This section has the cryptographic API's related to ECDH, ECDSA and RSA.
          - This API need to be defined under the
     macro [MBEDTLS_ECDH_COMPUTE_SHARED_ALT](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdh.c/#L134).
       - By default the above API is implemented under
-    “ESP_IDF\components\mbedtls\mbedtls\library\ecdh.c” file for software crypto operation. This software
+    “ESP_IDF_PATH\components\mbedtls\mbedtls\library\ecdh.c” file for software crypto operation. This software
     implementation of above API need to be guarded under macro as below
     #ifdef ! MBEDTLS_ECDH_COMPUTE_SHARED_ALT
 
     For more information about OPTIGA™ Trust M Key generation and shared secret operation refer [example_optiga_crypt_ecdh.c](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/optiga/example_optiga_crypt_ecdh.c)
 
-    [rele_link]: https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9
-#
-- #### ECDSA Functions <br>
 
-    Create all the below mentioned APIs in  “optiga_trust_ecdsa.c” file and move file under [mbedTLSPort](https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port). Entire “optiga_trust_ecdsa.c” file must be guarded under
+#
+- #### ECDSA <br>
+
+    Create all the below mentioned APIs in  “trustm_ecdsa.c” file and move file under [mbedTLSPort](https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port). Entire “trustm_ecdsa.c” file must be guarded under
     macro
-    [MBEDTLS_ECDSA_C](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdsa.c/#29)
+    [MBEDTLS_ECDSA_C](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdsa.c/#29)<br>
+    Here we are porting ECDSA sign and ECDSA verify API's. 
      
     - [static void optiga_lib_status_t crypt_event_completed_status;](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdsa.c/#L45)<br>
   This static variable will be used to store call back status.
@@ -113,7 +117,6 @@ This section has the cryptographic API's related to ECDH, ECDSA and RSA.
     return_status)](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdsa.c/#L45-L55)<br>  This is used as callback function to return the API execution status after the operation is completed
         asynchronously.
 
-    
    -  [int mbedtls_ecdsa_sign( mbedtls_ecp_group *grp, mbedtls_mpi *r, mbedtls_mpi
     *s,const mbedtls_mpi *d, const unsigned char *buf, size_t blen, int (*f_rng)(void
     *, unsigned char *, size_t), void *p_rng )](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdsa.c/#L58-L136)<br>
@@ -121,7 +124,7 @@ This section has the cryptographic API's related to ECDH, ECDSA and RSA.
         - This API need to be defined under the macro
     [MBEDTLS_ECDSA_SIGN_ALT](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdsa.c/#L57)
       - By default the above API is implemented under
-    “ESP_IDF\components\mbedtls\mbedtls\library\ecdsa.c” file for software crypto operation.This software implementation of above API need to be guarded under macro as below #ifdef ! MBEDTLS_ECDSA_SIGN_ALT
+    “ESP_IDF_PATH\components\mbedtls\mbedtls\library\ecdsa.c” file for software crypto operation.This software implementation of above API need to be guarded under macro as below #ifdef ! MBEDTLS_ECDSA_SIGN_ALT
     
     
    -  [int mbedtls_ecdsa_verify( mbedtls_ecp_group *grp,const unsigned char *buf, size_t
@@ -132,10 +135,13 @@ This section has the cryptographic API's related to ECDH, ECDSA and RSA.
         “ESP_IDF\components\mbedtls\mbedtls\library\ecdsa.c” file for software crypto operation.This software
         implementation of above API need to be guarded under macro as below
         #ifdef ! MBEDTLS_ECDSA_VERIFY_ALT`
+        
+         For more information about OPTIGA™ Trust M Key generation and shared secret operation refer [example_optiga_crypt_ecdsa_sign.c ](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/optiga/example_optiga_crypt_ecdsa_sign.c) and [example_optiga_crypt_ecdsa_verify.c ](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/optiga/example_optiga_crypt_ecdsa_verify.c)
+         
 #
-- #### RSA Functions <br>
-    Copy the mbedTLS rsa file from folder "ESP_IDF\components\mbedtls\mbedtls\rsa.c" to examples/mbedtls
-     to the directory [mbedTLSPort](https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port). Rename the file to “trust_rsa.c”. Entire “trust_rsa.c” file must be guarded under macro [MBEDTLS_RSA_ALT](C:\AzureEsp32\EspAzure\esp-idf\components\optiga\examples\integration\mbedtls\trustm_rsa.c\#L58)
+- #### RSA <br>
+    Copy the mbedTLS rsa file from folder "ESP_IDF_PATH\components\mbedtls\mbedtls\rsa.c" to the directory [mbedTLSPort](https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port). Rename the file to “trustm_rsa.c”. Entire “trustm_rsa.c” file must be guarded under macro [MBEDTLS_RSA_ALT](C:\AzureEsp32\EspAzure\esp-idf\components\optiga\examples\integration\mbedtls\trustm_rsa.c\#L58)<br>
+    Here we are porting RSA sign,verify,encrypt,decrypt API's
 
     - [#define TRUSTM_RSA_1024_KEYSIZE (0x0080)]()<br>
     This macro defines the key size for RSA 1024
@@ -154,33 +160,37 @@ This section has the cryptographic API's related to ECDH, ECDSA and RSA.
     - [#define TRUSTM_RSA_CHECK_MODULUS_FIRST_BYTE_NEGATIVE(value)]()<br>
     This macro checks whether modulus is negative or not
     - [#define TRUSTM_RSA_GET_LENGTH_FIELD_INBYTES(value)]()<br>
-    This macro defines length field required for DER BIT STRING for RSA 1024 and 2048
+    This macro defines length field required for DER BIT STRING for RSA 1024 and 2048 <br>
+      
     - [static volatile optiga_lib_status_t crypt_event_completed_status;]()<br>
     This static variable will be used to store call back status.
+    
     - [static void optiga_crypt_event_completed(void * context, optiga_lib_status_t
     return_status)]()<br>
     This is used as call back function to return the API execution status after the operation is completed
     asynchronously.
+    
     - [static void mbedtls_rsa_create_public_key_bit_string_format( const uint8_t *
     n_buffer,uint16_t n_length, const uint8_t * e_buffer, uint16_t e_length,
     uint8_t * key_buffer, uint16_t * key_length)]()<br>
     This function forms the public key in DER BIT STRING format.
+    
     - [static int mbedtls_rsa_get_sig_scheme_digest_len(mbedtls_md_type_t md_alg,optiga_rsa_signature_scheme_t * signature_scheme, uint8_t *
     digest_length)]()<br>
     This function used to get signature algorithm and digest length based on the hash algorithm.
+    
     - [static int mbedtls_rsa_get_sig_len_key_type(uint16_t modulus_length,uint16_t * signature_length, uint8_t * key_type)]()<br>
     This function used to get signature length and key type based on modulus length.
     - [int mbedtls_rsa_rsassa_pkcs1_v15_verify( mbedtls_rsa_context *ctx, int
     (*f_rng)(void *, unsigned char *, size_t), void *p_rng, int mode,
     mbedtls_md_type_t md_alg, unsigned int hashlen, const unsigned char *hash,
     const unsigned char *sig )]()<br>
-        - This API verifies the signature using OPTIGA™ security chip using the public key.
+    This API verifies the signature using OPTIGA™ security chip using the public key.
      ```sh       
     Note :
-     Azure RSA 4096 certificate chain must be disabled since OPTIGA doesn't support RSA 4096 algorithm.
-    where to update : This has to be disabled in the file esp_tls.c present under “ESP_IDF\components\esptls”.
-    what to update: Update “mbedtls_ssl_conf_authmode(&tls->conf, MBEDTLS_SSL_VERIFY_NONE)” in
-    function static esp_err_t set_ca_cert(esp_tls_t *tls, const unsigned char *cacert, size_t cacert_len)
+    If Azure Certificate chain has RSA 4096 certificate, certificate path validation has to be disabled since OPTIGA™ Trust M supports      only RSA 1024 and 2048.<br>
+    Disabling of certificate path validation can be done by updating "mbedtls_ssl_conf_authmode(&tls->conf, MBEDTLS_SSL_VERIFY_NONE)" in function "static esp_err_t  set_ca_cert(esp_tls_t *tls, const unsigned char *cacert, size_t cacert_len)" in file esp_tls.c present under “ESP_IDF_PATH\components\esptls”
+    
     ```
     - [int mbedtls_rsa_rsassa_pkcs1_v15_sign( mbedtls_rsa_context *ctx,int (*f_rng)
     (void *, unsigned char *, size _t), void *p_rng, int mode, mbedtls_md_type_t
@@ -188,10 +198,12 @@ This section has the cryptographic API's related to ECDH, ECDSA and RSA.
     )]()<br>
     This API generates signature for the given digest using the RSA private key stored in OPTIGA™ security
     chip and the signature generated need to be stored in the mbedTLS signature structure.
+    
     - [int mbedtls_rsa_rsaes_pkcs1_v15_encrypt( mbedtls_rsa_context *ctx, int
     (*f_rng)(void *, unsigned char *, size_t),void *p_rng,int mode, size_t
     ilen,const unsigned char *input, unsigned char *output )]()<br>
     This API encrypts the input message using OPTIGA™ security chip.
+    
     - [int mbedtls_rsa_rsaes_pkcs1_v15_decrypt( mbedtls_rsa_context *ctx, int
     (*f_rng)(void *, unsigned char *, size_t), void *p_rng, int mode, size_t
     *olen,const unsigned char *input, unsigned char *output, size_t
