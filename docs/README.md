@@ -16,7 +16,7 @@ single board computer, PC etc.).mbedTLS is a crypto library used in FreeRTOS to 
 
 ### 2. OPTIGA™ Trust M Integration to mbedTLS<a name="subparagraph1"></a>
 
-The functions that are need to be integrated to mbedTLS are defined below.<br>
+The functions that are needed to be integrated to mbedTLS are defined below.<br>
 
 #### 2.1 Initialization API's <a name="initialization"></a>
 
