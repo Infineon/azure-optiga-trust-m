@@ -1,5 +1,5 @@
 
-# Porting Guide
+# Porting guide to enable OPTIGA™ Trust M on your MbedTLS package 
 This document guides to port the mbeTLS software crypto library functions
 to use OPTIGA™ Trust M hardware secure element based cryptographic functionalities.
  
