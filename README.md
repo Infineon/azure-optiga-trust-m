@@ -9,6 +9,7 @@ This repository contains one of Application Notes for OPTIGA™ Trust M security
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Setting up Azure IoT Hub](#setting-up-azure-iot-hub)
+- [Porting guide to enable OPTIGA™ Trust M on your MbedTLS package](#porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package)
 - [Personalize OPTIGA™ Trust M Shield2Go](#personalize-optiga-trust-m-shield2go)
 - [Configuring and Building Sample](#configuring-and-building-sample) 
 - [Troubleshooting](#troubleshooting) 
@@ -76,7 +77,7 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
 - Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL can be downloaded from below link
 
     [Openssl EXE](https://slproweb.com/products/Win32OpenSSL.html)
-    
+##
 ## Setting up Azure IoT Hub
 
 <a name="setting-up-azure-iot-hub"></a>
@@ -122,6 +123,9 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
 - Note down newly created IoT Device **Device ID** 
 
 ## Porting guide to enable OPTIGA™ Trust M on your MbedTLS package
+
+<a name="porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package"></a>
+
 - If you want to port Trust M onto any board where MbedTLS is used for crypto operation, you can follow the steps in documentation [here](https://github.com/Infineon/azure-optiga-trust-m/tree/master/docs).
 
 ## Personalize OPTIGA™ Trust M Shield2Go
