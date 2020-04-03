@@ -12,8 +12,7 @@ to use OPTIGA™ Trust M hardware secure element based cryptographic functionali
    
 ## 1. About this Document <a name="introduction"></a>
 The aim of this document is to describe the porting details of OPTIGA™ Trust M into mbedTLS software crypto library on any hardware platform (e.g. microcontroller,
-single board computer, PC etc.). In this porting guide ESP32 is used as a
-sample reference board to demonstrate the porting steps.
+single board computer, PC etc.).mbedTLS is a crypto library used in FreeRTOS to perform TLS Handshke (secure channel establishment). This library uses an interface, which allows to substitute some of it's functionality by third-party crypto implemementations. Trust M substitutes standard software crypto implemementation for FreeRTOS/mbedTLS for such functions as: ECDSA, ECDHE, RSA.
 
 ### 2. OPTIGA™ Trust M Integration to mbedTLS<a name="subparagraph1"></a>
 
@@ -55,13 +54,12 @@ format.
 
 #### 2.2 Cryptographic API's <a name="Cryptofunctions"></a>
 
-mbedTLS is a crypto library used in FreeRTOS to perform TLS Handshke (secure channel establishment). This library uses an interface, which allows to substitute some of it's functionality by third-party crypto implemementations. Trust M substitutes standard software crypto implemementation for FreeRTOS/mbedTLS for such functions as: ECDSA, ECDHE,RSA.
 
 - #### ECDH
+    This section explains about porting of ECDH key pair geneartion and shared secret computation API's.<br>
     Create all the below mentioned APIs in  “trustm_ecdh.c” file and move file under directory [mbedTLSPort](https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port).
     Entire “trustm_ecdh.c” file must be guarded under
     macro [MBEDTLS_ECDH_C](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdh.c/#L31)<br>
-    Here we are porting ECDH key pair geneartion and shared secret computation API's.
   
     - [#define OPTIGA_TRUSTM_KEYID_TO_STORE_SHARED_SECRET  0xE103](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdh.c/#L49)
     <br>This macro defines the session oid used to store shared secret genearted
@@ -104,11 +102,11 @@ mbedTLS is a crypto library used in FreeRTOS to perform TLS Handshke (secure cha
 
 #
 - #### ECDSA <br>
-
+    This section explains about porting of ECDSA sign and ECDSA verify API's. <br>
     Create all the below mentioned APIs in  “trustm_ecdsa.c” file and move file under [mbedTLSPort](https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port). Entire “trustm_ecdsa.c” file must be guarded under
     macro
     [MBEDTLS_ECDSA_C](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdsa.c/#29)<br>
-    Here we are porting ECDSA sign and ECDSA verify API's. 
+    
      
     - [static void optiga_lib_status_t crypt_event_completed_status;](https://github.com/Infineon/optiga-trust-m/blob/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port/trustm_ecdsa.c/#L45)<br>
   This static variable will be used to store call back status.
@@ -140,8 +138,10 @@ mbedTLS is a crypto library used in FreeRTOS to perform TLS Handshke (secure cha
          
 #
 - #### RSA <br>
+
+    This section explains about porting of RSA sign,verify,encrypt,decrypt API's<br>
     Copy the mbedTLS rsa file from folder "ESP_IDF_PATH\components\mbedtls\mbedtls\rsa.c" to the directory [mbedTLSPort](https://github.com/Infineon/optiga-trust-m/tree/ae80dfe4b1ac35b5932644e783ff9d226ae266d9/examples/mbedtls_port). Rename the file to “trustm_rsa.c”. Entire “trustm_rsa.c” file must be guarded under macro [MBEDTLS_RSA_ALT](C:\AzureEsp32\EspAzure\esp-idf\components\optiga\examples\integration\mbedtls\trustm_rsa.c\#L58)<br>
-    Here we are porting RSA sign,verify,encrypt,decrypt API's
+   
 
     - [#define TRUSTM_RSA_1024_KEYSIZE (0x0080)]()<br>
     This macro defines the key size for RSA 1024
