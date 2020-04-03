@@ -37,7 +37,7 @@ format.
    - [void read_trust_anchor_from_optiga(uint16_t oid, char * cert_pem, uint16_t * cert_pem_length)]()<br>
    This API reads the data from trust anchor oid.
    
-   -[static void write_optiga_trust_anchor(void)]()<br>
+   - [static void write_optiga_trust_anchor(void)]()<br>
    This API writes the trust anchor to OPTIGA™ trust anchor OID.
 
     - [static void write_data_object (uint16_t oid, const uint8_t * p_data, uint16_t
@@ -188,8 +188,8 @@ mbedTLS is a crypto library used in FreeRTOS to perform TLS Handshke (secure cha
     This API verifies the signature using OPTIGA™ security chip using the public key.
      ```sh       
     Note :
-    If Azure Certificate chain has RSA 4096 certificate, certificate path validation has to be disabled since OPTIGA™ Trust M supports      only RSA 1024 and 2048.<br>
-    Disabling of certificate path validation can be done by updating "mbedtls_ssl_conf_authmode(&tls->conf, MBEDTLS_SSL_VERIFY_NONE)" in function "static esp_err_t  set_ca_cert(esp_tls_t *tls, const unsigned char *cacert, size_t cacert_len)" in file esp_tls.c present under “ESP_IDF_PATH\components\esptls”
+    - If Azure Certificate chain has RSA 4096 certificate, certificate path validation has to be disabled since OPTIGA™ Trust M supports      only RSA 1024 and 2048.
+    - Disabling of certificate path validation can be done by updating "mbedtls_ssl_conf_authmode(&tls->conf, MBEDTLS_SSL_VERIFY_NONE)" in function "static esp_err_t  set_ca_cert(esp_tls_t *tls, const unsigned char *cacert, size_t cacert_len)" in file esp_tls.c present under “ESP_IDF_PATH\components\esptls”
     
     ```
     - [int mbedtls_rsa_rsassa_pkcs1_v15_sign( mbedtls_rsa_context *ctx,int (*f_rng)
