@@ -188,7 +188,7 @@ mbedTLS is a crypto library used in FreeRTOS to perform TLS Handshke (secure cha
     This API verifies the signature using OPTIGA™ security chip using the public key.
      ```sh       
     Note :
-    - If Azure Certificate chain has RSA 4096 certificate, certificate path validation has to be disabled since OPTIGA™ Trust M supports      only RSA 1024 and 2048.
+    - If Azure Certificate chain has RSA 4096 certificate, certificate path validation has to be disabled since OPTIGA™ Trust M supports only RSA 1024 and 2048.
     - Disabling of certificate path validation can be done by updating "mbedtls_ssl_conf_authmode(&tls->conf, MBEDTLS_SSL_VERIFY_NONE)" in function "static esp_err_t  set_ca_cert(esp_tls_t *tls, const unsigned char *cacert, size_t cacert_len)" in file esp_tls.c present under “ESP_IDF_PATH\components\esptls”
     
     ```
