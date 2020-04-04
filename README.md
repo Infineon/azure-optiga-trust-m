@@ -222,10 +222,6 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
 
     ![](docs/images/Esp32_connection_with_Shield2Go.jpg)
 
-- Copy the below text to the  the &quot;CMakeLists.txt&quot; located under <esp-idf/components/mbedtls> below the **set(mbedtls_targets mbedtls mbedcrypto mbedx509)** text
-    ```sh
-    include("${OPTIGA_COMPONENT_DIRS}/CMakeLists.txt")
-    ```
 - Follow this step only if Server root CA is loaded into any of OPTIGA data object 
     - Enable macro "LOAD_TA_FROM_OPTIGA" in "esp-azure\examples\iothub_client_sample_mqtt\main\ iothub_client_sample_mqtt.c" file and define trust_anchor as optiga data object which is loaded with server root CA as below
          ```sh
@@ -240,7 +236,7 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
         #endif
         ```
     - To enable server validation using OPTIGA, region specific server root CA certificate must be loaded in any of OPTIGA data object either by personalization or by writing to object using OPTIGA write API
-    - To load trust anchor using OPTIGA write API, modify file <esp-idf\components\optiga\optiga\optiga_trust.c> as below
+    - To load trust anchor using OPTIGA write API, modify file <azure-optiga-trust-m\components\optiga\optiga\optiga_trust.c> as below
         - Define OPTIGA_TA with optiga data object where server root CA requires to be loaded and define trust_anchor with region specific root CA in API "write_optiga_trust_anchor(void)"
         - Note: user can either choose from available certificate or can provide specific certificate 
             ```sh
@@ -327,7 +323,7 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
     
     C:\Users\username\Desktop\esp-idf>
     ```
-- Change working directory to <esp-azure\examples\iothub_client_sample_mqtt>
+- Change working directory to <azure-optiga-trust-m\examples\iothub_client_sample_mqtt>
 - Configure "example configuration" using below command
 
     ```sh
