@@ -4,3 +4,7 @@
 [submodule "components/azure-iot-sdk-c"]
 	path = components/azure-iot-sdk-c
 	url = https://github.com/Azure/azure-iot-sdk-c.git
+[submodule "components/optiga/optiga-trust-m"]
+	path = components/optiga/optiga-trust-m
+	url = https://github.com/Infineon/optiga-trust-m.git
+	branch = master
