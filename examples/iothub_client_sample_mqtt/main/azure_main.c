@@ -76,7 +76,7 @@ static void initialise_wifi(void)
     ESP_ERROR_CHECK( esp_wifi_start() );
 }
 
-void optiga_trust_init(void);
+extern void optiga_trust_init(void);
 
 void azure_task(void *pvParameter)
 {

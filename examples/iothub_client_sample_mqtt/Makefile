@@ -5,6 +5,6 @@
 
 PROJECT_NAME := iothub_client_sample_mqtt
 
-EXTRA_COMPONENT_DIRS += $(PROJECT_PATH)/../../../esp-azure
+EXTRA_COMPONENT_DIRS += $(PROJECT_PATH)/../../components/esp-azure
 
 include $(IDF_PATH)/make/project.mk

@@ -3,5 +3,5 @@
 cmake_minimum_required(VERSION 3.5)
 
 include($ENV{IDF_PATH}/tools/cmake/project.cmake)
-set (EXTRA_COMPONENT_DIRS "${CMAKE_CURRENT_BINARY_DIR}/../../../port")
+set (EXTRA_COMPONENT_DIRS "${CMAKE_CURRENT_LIST_DIR}/../../components/optiga" "${CMAKE_CURRENT_LIST_DIR}/../../components/esp-azure/port")
 project(iothub_client_sample_mqtt)

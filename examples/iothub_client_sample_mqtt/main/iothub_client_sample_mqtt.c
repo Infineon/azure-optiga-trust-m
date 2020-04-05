@@ -30,43 +30,29 @@
 /*  "HostName=<host_name>;DeviceId=<device_id>;SharedAccessKey=<device_key>"                */
 /*  "HostName=<host_name>;DeviceId=<device_id>;SharedAccessSignature=<device_sas_token>"    */
 /*  "HostName=<host_name>;DeviceId=<device_id>;x509=true"                      */
-/*  "HostName=DIoTHub.azure-devices.net;DeviceId=IoTDev_End001/End001;x509=true"  */
-/*  "HostName=DIoTHub.azure-devices.net;DeviceId=IoTDev2Sym;SharedAccessKey=ChLr26YXhcVgGA6AH6hGQtlppsv+kFPYwuHwev0Idy4=" */
+#define EXAMPLE_IOTHUB_CONNECTION_STRING CONFIG_IOTHUB_CONNECTION_STRING
 
-#if 1
-#define EXAMPLE_IOTHUB_CONNECTION_STRING "HostName=DIoTHub2.azure-devices.net;DeviceId=Infineon_IoT_Node;x509=true"
-#if 0
-static const char* x509certificate =
-//Infineon_IoT_Node
-"-----BEGIN CERTIFICATE-----""\n"
-"MIICPjCCAeSgAwIBAgIIZq02c+2kNCQwCgYIKoZIzj0EAwIwdzELMAkGA1UEBhMC""\n"
-"REUxITAfBgNVBAoMGEluZmluZW9uIFRlY2hub2xvZ2llcyBBRzETMBEGA1UECwwK""\n"
-"T1BUSUdBKFRNKTEwMC4GA1UEAwwnSW5maW5lb24gT1BUSUdBKFRNKSBUcnVzdCBN""\n"
-"IFRlc3QgQ0EgMDAwMB4XDTE5MDgwMzExMzkwMFoXDTI5MDgwMzExMzkwMFowUDEL""\n"
-"MAkGA1UEBhMCSU4xCzAJBgNVBAcTAkxOMQswCQYDVQQKEwJPTjELMAkGA1UECxMC""\n"
-"T1UxGjAYBgNVBAMMEUluZmluZW9uX0lvVF9Ob2RlMFkwEwYHKoZIzj0CAQYIKoZI""\n"
-"zj0DAQcDQgAEVR4K2QEZ0EQ+veRL7KOi6QcI0go5IOEMadfWrqXdb0FC4nNRDG3Q""\n"
-"BQJgX21FNU/MfwzbHrvdTY5AvFVl0novgaOBgDB+MAwGA1UdEwEB/wQCMAAwHQYD""\n"
-"VR0OBBYEFLlGtwAB2V78gEIO7Wr5C1N5p0+uMB8GA1UdIwQYMBaAFFMbRjLyuhvs""\n"
-"NSOwxoTivH8R2qIuMA4GA1UdDwEB/wQEAwIHgDAeBglghkgBhvhCAQ0EERYPeGNh""\n"
-"IGNlcnRpZmljYXRlMAoGCCqGSM49BAMCA0gAMEUCIQCYAFWNWOkkuWkbEg1O4Kvz""\n"
-"ANoUOjkF58jOvQcPfQPqVAIgRXdsd9DMUfjVd1znvO1W2Dn5mIwG/1ZzeQQeN6tf""\n"
-"i3M=""\n"
-"-----END CERTIFICATE-----";
-#endif
+static const char* connectionString = EXAMPLE_IOTHUB_CONNECTION_STRING;
+
 static char device_certificate_pem [1200] = {0};
 static uint16_t device_certificate_pem_length = sizeof(device_certificate_pem);
 
-static const char* x509privatekey =
-"-----BEGIN EC PRIVATE KEY-----""\n"
-"MHcCAQEEIM1jJQMrflsOEj5LTd+Ee4nRjSFafufCkrcofLRVXbmEoAoGCCqGSM49""\n"
-"AwEHoUQDQgAEz6L0l2zFE7gyI3mwC67UUED/CjV68uREaxe7VO16y8g6hegooPJV""\n"
-"rHIy4FprrkMPg6QUPnxX5NNLjeJnBEGxMA==""\n"
-"-----END EC PRIVATE KEY-----";
-#else
-#define EXAMPLE_IOTHUB_CONNECTION_STRING CONFIG_IOTHUB_CONNECTION_STRING
+/* Enable LOAD_TA_FROM_OPTIGA if server root certificate is loaded in otpiga */
+#define LOAD_TA_FROM_OPTIGA 0    // 1 = Enable, 0 = Disable
+
+#if LOAD_TA_FROM_OPTIGA
+//Read trust anchor from OPTIGA
+#define trust_anchor 0xE0E8
+static char trust_anchor_pem [1300] = {0};
+static uint16_t trust_anchor_pem_length = sizeof(trust_anchor_pem);
 #endif
-static const char* connectionString = EXAMPLE_IOTHUB_CONNECTION_STRING;
+
+const char x509privatekey[] =
+"-----BEGIN EC PRIVATE KEY-----\r\n"
+"MHcCAQEEIDkoXdx0gErvQDm8TyDoqWJibRSo0GWNCjWR6oMjKUhRoAoGCCqGSM49\r\n"
+"AwEHoUQDQgAEU7b1qd5vN0sCxEn8On2uoFEkD9c9APP1rOT/JPinjkASxzpbpxgp\r\n"
+"bjBkpNh8Or8AmGboQjRUnFgGUA+AB6OoQg==\r\n"
+"-----END EC PRIVATE KEY-----\r\n";
 
 static int callbackCounter;
 static char msgText[1024];
@@ -162,7 +148,11 @@ void connection_status_callback(IOTHUB_CLIENT_CONNECTION_STATUS result, IOTHUB_C
     (void)printf("\n\nConnection Status result:%s, Connection Status reason: %s\n\n", ENUM_TO_STRING(IOTHUB_CLIENT_CONNECTION_STATUS, result),
                  ENUM_TO_STRING(IOTHUB_CLIENT_CONNECTION_STATUS_REASON, reason));
 }
-extern void read_certificate(char * cert_pem, uint16_t * length);
+
+extern void read_certificate_from_optiga(char * cert_pem, uint16_t * length);
+extern void read_trust_anchor_from_optiga(uint16_t oid, char * cert_pem, uint16_t * cert_pem_length);
+extern uint32_t pal_os_timer_get_time_in_milliseconds(void);
+
 void iothub_client_sample_mqtt_run(void)
 {
     IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle;
@@ -171,9 +161,9 @@ void iothub_client_sample_mqtt_run(void)
 
     g_continueRunning = true;
     srand((unsigned int)time(NULL));
-    //double avgWindSpeed = 10.0;
+    double avgWindSpeed = 10.0;
     double minTemperature = 20.0;
-    //double minHumidity = 60.0;
+    double minHumidity = 60.0;
 
     callbackCounter = 0;
     int receiveContext = 0;
@@ -191,18 +181,26 @@ void iothub_client_sample_mqtt_run(void)
         else
         {
             bool traceOn = true;
-            IoTHubClient_LL_SetOption(iotHubClientHandle, OPTION_LOG_TRACE, &traceOn);
+            //IoTHubClient_LL_SetOption(iotHubClientHandle, OPTION_LOG_TRACE, &traceOn);
 
             IoTHubClient_LL_SetConnectionStatusCallback(iotHubClientHandle, connection_status_callback, NULL);
             // Setting the Trusted Certificate.  This is only necessary on system with without
             // built in certificate stores.
 #ifdef SET_TRUSTED_CERT_IN_SAMPLES
-            IoTHubDeviceClient_LL_SetOption(iotHubClientHandle, OPTION_TRUSTED_CERT, certificates);
-#endif // SET_TRUSTED_CERT_IN_SAMPLES
+            #if LOAD_TA_FROM_OPTIGA
+			/*Trust Anchor is required to validate server
+			below api requires server root certificate to be pre-loaded in data object (optiga trust anchor)
+			provide oid where server CA is loaded Ex:0xE0E8 */
+			read_trust_anchor_from_optiga(trust_anchor, trust_anchor_pem, &trust_anchor_pem_length);
+			char const * const certificates = trust_anchor_pem;
+			#endif
 
+			IoTHubDeviceClient_LL_SetOption(iotHubClientHandle, OPTION_TRUSTED_CERT, certificates);
+#endif // SET_TRUSTED_CERT_IN_SAMPLES
+			
             // Set the X509 certificates in the SDK
-            read_certificate(device_certificate_pem, &device_certificate_pem_length);
-            if (
+			read_certificate_from_optiga(device_certificate_pem, &device_certificate_pem_length);
+			if (
                 (IoTHubDeviceClient_LL_SetOption(iotHubClientHandle, OPTION_X509_CERT, device_certificate_pem) != IOTHUB_CLIENT_OK) ||
                 (IoTHubDeviceClient_LL_SetOption(iotHubClientHandle, OPTION_X509_PRIVATE_KEY, x509privatekey) != IOTHUB_CLIENT_OK)
                 )
@@ -210,7 +208,7 @@ void iothub_client_sample_mqtt_run(void)
                 printf("failure to set options for x509, aborting\r\n");
                 return;
             }
-
+			
             /* Setting Message call back, so we can receive Commands. */
             if (IoTHubClient_LL_SetMessageCallback(iotHubClientHandle, ReceiveMessageCallback, &receiveContext) != IOTHUB_CLIENT_OK)
             {
@@ -223,7 +221,7 @@ void iothub_client_sample_mqtt_run(void)
                 /* Now that we are ready to receive commands, let's send some messages */
                 int iterator = 0;
                 double temperature = 0;
-                //double humidity = 0;
+                double humidity = 0;
                 time_t sent_time = 0;
                 time_t current_time = 0;
                 do
@@ -234,9 +232,9 @@ void iothub_client_sample_mqtt_run(void)
                         && iterator <= callbackCounter
                         && (difftime(current_time, sent_time) > ((CONFIG_MESSAGE_INTERVAL_TIME) / 1000)))
                     {
-                        temperature = minTemperature;
-                        //humidity = minHumidity +  (rand() % 20);
-                        sprintf_s(msgText, sizeof(msgText), "{\"Infineon_IoT_Node\":\"myFirstDevice\",\"time\":%s,\"temperature\":%.2f,}", current_time, temperature + (rand() % 3));
+                        temperature = minTemperature + (rand() % 10);
+                        humidity = minHumidity +  (rand() % 20);
+                        sprintf_s(msgText, sizeof(msgText), "{\"deviceId\":\"myFirstDevice-san\",\"windSpeed\":%.2f,\"temperature\":%.2f,\"humidity\":%.2f}", avgWindSpeed + (rand() % 4 + 2), temperature, humidity);
                         if ((message.messageHandle = IoTHubMessage_CreateFromByteArray((const unsigned char*)msgText, strlen(msgText))) == NULL)
                         {
                             (void)printf("ERROR: iotHubMessageHandle is NULL!\r\n");
