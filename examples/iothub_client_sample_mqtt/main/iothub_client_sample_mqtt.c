@@ -42,7 +42,6 @@ static uint16_t device_certificate_pem_length = sizeof(device_certificate_pem);
 
 #if LOAD_TA_FROM_OPTIGA
 //Read trust anchor from OPTIGA
-#define trust_anchor 0xE0E8
 static char trust_anchor_pem [1300] = {0};
 static uint16_t trust_anchor_pem_length = sizeof(trust_anchor_pem);
 #endif
@@ -191,7 +190,7 @@ void iothub_client_sample_mqtt_run(void)
 			/*Trust Anchor is required to validate server
 			below api requires server root certificate to be pre-loaded in data object (optiga trust anchor)
 			provide oid where server CA is loaded Ex:0xE0E8 */
-			read_trust_anchor_from_optiga(trust_anchor, trust_anchor_pem, &trust_anchor_pem_length);
+			read_trust_anchor_from_optiga(CONFIG_OPTIGA_TRUST_M_TRUSTANCHOR_SLOT, trust_anchor_pem, &trust_anchor_pem_length);
 			char const * const certificates = trust_anchor_pem;
 			#endif
 

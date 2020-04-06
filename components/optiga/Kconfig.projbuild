@@ -1,0 +1,70 @@
+menu "OPTIGA(TM) Trust M config"
+
+	config OPTIGA_TRUST_M_CERT_SLOT
+		hex
+		default 0xE0E0 if OPTIGA_TRUST_M_CERT_SLOT0
+		default 0xE0E1 if OPTIGA_TRUST_M_CERT_SLOT1
+		default 0xE0E2 if OPTIGA_TRUST_M_CERT_SLOT2
+		default 0xE0E3 if OPTIGA_TRUST_M_CERT_SLOT3
+
+		choice 
+			prompt "Select a certificate slot for authentication"
+			default OPTIGA_TRUST_M_CERT_SLOT0
+			help
+				Four slots are supported, private keys 0xE0F0-0xE0F3 are used for these certificates
+
+			config OPTIGA_TRUST_M_CERT_SLOT0
+				bool "1st cert slot"
+			config OPTIGA_TRUST_M_CERT_SLOT1
+				bool "2nd cert slot"
+			config OPTIGA_TRUST_M_CERT_SLOT2
+				bool "3rd cert slot"
+			config OPTIGA_TRUST_M_CERT_SLOT3
+				bool "4th cert slot"
+		endchoice
+			
+	config OPTIGA_TRUST_M_PRIVKEY_SLOT
+		hex
+		default 0xE0F0 if OPTIGA_TRUST_M_PRIVKEY_SLOT0
+		default 0xE0F1 if OPTIGA_TRUST_M_PRIVKEY_SLOT1
+		default 0xE0F2 if OPTIGA_TRUST_M_PRIVKEY_SLOT2
+		default 0xE0F3 if OPTIGA_TRUST_M_PRIVKEY_SLOT3
+
+		choice 
+			prompt "Select a private key slot for authentication"
+			default OPTIGA_TRUST_M_PRIVKEY_SLOT0
+			help
+				By default should correspond to a certificate slot
+
+			config OPTIGA_TRUST_M_PRIVKEY_SLOT0
+				bool "1st private key slot"
+			config OPTIGA_TRUST_M_PRIVKEY_SLOT1
+				bool "2nd private key slot"
+			config OPTIGA_TRUST_M_PRIVKEY_SLOT2
+				bool "3rd private key slot"
+			config OPTIGA_TRUST_M_PRIVKEY_SLOT3
+				bool "4th private key slot"
+		endchoice
+
+		
+	config OPTIGA_TRUST_M_TRUSTANCHOR_SLOT
+		hex
+		default 0xE0E8 if OPTIGA_TRUST_M_TRUSTANCHOR_SLOT0
+		default 0xE0E9 if OPTIGA_TRUST_M_TRUSTANCHOR_SLOT1
+		default 0xE0EF if OPTIGA_TRUST_M_TRUSTANCHOR_SLOT2
+
+		choice 
+			prompt "Select a Trust Anchor slot for authentication"
+			default OPTIGA_TRUST_M_TRUSTANCHOR_SLOT0
+			help
+				Three slots are supported for Trust Anchor
+
+			config OPTIGA_TRUST_M_TRUSTANCHOR_SLOT0
+				bool "1st Trust Anchor slot"
+			config OPTIGA_TRUST_M_TRUSTANCHOR_SLOT1
+				bool "2nd Trust Anchor slot"
+			config OPTIGA_TRUST_M_TRUSTANCHOR_SLOT2
+				bool "3rd Trust Anchor slot"
+		endchoice
+		
+endmenu  # OPTIGA(TM) Trust M
