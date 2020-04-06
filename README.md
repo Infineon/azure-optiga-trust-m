@@ -1,4 +1,4 @@
-# Microsoft Azure IoT Integration with the Infineon OPTIGA&trade; Trust M 
+# Microsoft Azure IoT Integration with </br> the Infineon OPTIGA&trade; Trust M 
 
 ## Description
 
