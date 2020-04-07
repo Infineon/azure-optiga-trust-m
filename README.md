@@ -48,7 +48,7 @@ This project is to be used with Espressif's IoT Development Framework, [ESP IDF]
 Open the Command Prompt, and run the following commands:
 
 ``` bash
-git clone -b v4.0 --recursive https://github.com/espressif/esp-idf.git
+git clone -b v4.1-beta1 --recursive https://github.com/espressif/esp-idf.git
 ```
 - In addition to cloning the ESP IDF github, Download and install the ESP-IDF Tools Installer for Windows from below link
     
@@ -231,6 +231,10 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust.git
 
     ![](docs/images/Esp32_connection_with_Shield2Go.jpg)
 
+- Open the file **"optiga_lib_config.h"** present in the below given path and update the value of macro **"OPTIGA_COMMS_DEFAULT_RESET_TYPE"** to **"1"** 
+    ```sh
+    File path : azure-optiga-trust-m\components\optiga\optiga-trust-m\optiga\include\optiga
+    ```
 - Follow this step only if Server root CA is loaded into any of OPTIGA data object 
     - Enable macro "LOAD_TA_FROM_OPTIGA" in <azure-optiga-trust-m\examples\iothub_client_sample_mqtt\main\iothub_client_sample_mqtt.c> file by setting value as "1"
          ```sh
@@ -238,7 +242,7 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust.git
         #define LOAD_TA_FROM_OPTIGA 0    // 1 = Enable, 0 = Disable
         ```
     - To enable server validation using OPTIGA, region specific server root CA certificate must be loaded in any of OPTIGA data object either by personalization or by writing to object using OPTIGA write API
-    - To load trust anchor using OPTIGA write API, modify file <azure-optiga-trust-m\components\optiga\optiga\optiga_trust.c> as below
+    - To load trust anchor using OPTIGA write API, modify file <azure-optiga-trust-m\components\optiga\optiga-trust-m\examples\utilities\optiga_trust.c> as below
         - User can choose the root CA as either from the below available certificate or can provide specific certificate by setting value as "1". E.g.:  #if 1
             ```sh
             static void write_optiga_trust_anchor(void)

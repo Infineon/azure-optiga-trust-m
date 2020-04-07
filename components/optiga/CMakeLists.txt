@@ -1,4 +1,8 @@
-set(COMPONENT_ADD_INCLUDEDIRS "${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/optiga/include")
+set(COMPONENT_ADD_INCLUDEDIRS 
+		"${PROJECT_SOURCE_DIR}/components/mbedtls/mbedtls/include"
+		"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/optiga/include"
+		"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/examples/mbedtls_port/include"
+		)
 
 set(COMPONENT_SRCS
     "${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/examples/utilities/optiga_trust.c"
