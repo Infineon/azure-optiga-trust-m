@@ -9,7 +9,7 @@ This repository contains one of Application Notes for OPTIGA™ Trust M security
 - [Prerequisites](#prerequisites)
 - [Getting Started](#getting-started)
 - [Setting up Azure IoT Hub](#setting-up-azure-iot-hub)
-- [Porting guide to enable OPTIGA™ Trust M on your MbedTLS package](#porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package)
+- [Porting guide to enable OPTIGA™ Trust M on your mbedTLS package](#porting-guide-to-enable-optiga™-trust-m-on-your-mbedtls-package)
 - [Personalize OPTIGA™ Trust M Shield2Go](#personalize-optiga-trust-m-shield2go)
 - [Configuring and Building Sample](#configuring-and-building-sample) 
 - [Troubleshooting](#troubleshooting) 
@@ -18,7 +18,7 @@ This repository contains one of Application Notes for OPTIGA™ Trust M security
 
 <a name="introduction"></a>
 
-The ESP OPTIGA Trust M package is based on Azure IoT C SDK and enable users to connect their ESP32 based devices to the Azure IoT hub using OPTIGA™ Trust M security chip for X.509 based security in Azure IoT hub. It provides some examples which can help to understand most common use cases.
+The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and enable users to connect their ESP32 based devices to the Azure IoT hub using OPTIGA™ Trust M security chip for X.509 based security in Azure IoT hub. It provides some examples which can help to understand most common use cases.
 
 ## Prerequisites
 
@@ -43,7 +43,6 @@ The ESP OPTIGA Trust M package is based on Azure IoT C SDK and enable users to c
 
 This project is to be used with Espressif's IoT Development Framework, [ESP IDF](https://github.com/espressif/esp-idf). Follow these steps to get started:
 
-- Setup ESP IDF development environment by following the steps [here](https://docs.espressif.com/projects/esp-idf/en/latest/get-started/index.html).
 - Clone the ESP IDF development framework as follows 
 
 Open the Command Prompt, and run the following commands:
@@ -51,15 +50,15 @@ Open the Command Prompt, and run the following commands:
 ``` bash
 git clone -b v4.0 --recursive https://github.com/espressif/esp-idf.git
 ```
-- In addition to Cloning the ESP IDF github, Download and install the ESP-IDF Tools Installer for Windows from below link
+- In addition to cloning the ESP IDF github, Download and install the ESP-IDF Tools Installer for Windows from below link
     
     [ESP-IDF Tools Installer](https://dl.espressif.com/dl/esp-idf-tools-setup-2.3.exe)
 
-- Note : Select ESP-IDF directory extracted in previous step while installing ESP-IDF Tools
+> Note: Select ESP-IDF directory extracted in previous step while installing ESP-IDF Tools
      
-    ![](docs/images/EspInstallation.png)
+![](docs/images/EspInstallation.png)
      
-- After succesful installation of ESP-IDF Tool, ESP-IDF command prompt will be available in the windows start
+- After successful installation of ESP-IDF Tool, the installer creates an “ESP-IDF Command Prompt” shortcut in the Start Menu. This shortcut opens the Command Prompt and sets up all the required environment variables
 
 - In a separate folder, clone the Azure OPTIGA&trade; Trust M project as follows (please note the --recursive option, which is required to clone the various git submodules required by Azure OPTIGA&trade; Trust M)
 
@@ -72,12 +71,12 @@ git clone --recursive Need to be updated
 - Clone the personalize-optiga-trust package as follows
 
 ``` bash
-git clone --recursive https://github.com/Infineon/personalize-optiga-trust
+git clone --recursive https://github.com/Infineon/personalize-optiga-trust.git
 ```
 - Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL can be downloaded from below link
 
     [Openssl EXE](https://slproweb.com/products/Win32OpenSSL.html)
-##
+
 ## Setting up Azure IoT Hub
 
 <a name="setting-up-azure-iot-hub"></a>
@@ -85,16 +84,26 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
 ### Create an IoT Hub using the Azure portal
 
 - Create an account and get an [Azure subscription](https://azure.microsoft.com/en-in/free/?WT.mc_id=A261C142F) if you do not have an Azure subscription already.
-- Create an Azure IoT Hub by following the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-create-through-portal).
+- Create an Azure IoT Hub by following the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-create-through-portal#create-an-iot-hub).
 
 > **Note: When selecting the "Pricing and scale tier", there is also an option to select , F1: Free tier, which should be sufficient for basic evaluation.**
 
 ### Register and Authenticate X.509 CA certificate to IoT Hub
 
 - Generate X.509 CA certificate using tools such as OpenSSL. To generate CA certificate using OpenSSL, execute the below commands
+    - Generate CA private key
+
     ``` bash
     openssl ecparam -name prime256v1 -genkey -noout –out ca_key_pair.pem
+    ```
+    - Generate Certificate Signing Request
+
+    ``` bash
     openssl req -new -key ca_key_pair.pem -out csr_ca.csr
+    ```
+    - Generate self-signed CA Certificate
+
+    ``` bash
     openssl req -x509 -sha256 -days 365 -key ca_key_pair.pem -in csr_ca.csr -out ca_cert.cer
     ```
     - During execution of second command, You will be prompted to give Distinguished Names(DN). Common Name (CN) is mandatory field in DN details. Give any user-friendly common name for csr generation, other fields can be skipped
@@ -103,12 +112,12 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
 
 ### Register X.509 CA certificate to your IoT Hub through azure portal
 
-- Register a CA certficcate to the IoT Hub created in the above step by following steps 1 to 6 under section **Register X.509 CA certificates to your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#register-x509-ca-certificates-to-your-iot-hub) and copy the generated  **Verification Code**
+- Register a CA certificate to the IoT Hub created in the above step by following steps 1 to 6 under section **Register X.509 CA certificates to your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#register-x509-ca-certificates-to-your-iot-hub) and copy the generated  **Verification Code**
     - Using the Verification code from the above step, Create .csr(csr_verification.csr) file to generate verification certificate which is required to verify X.509 CA certificate.
         ```sh
          openssl req -new -key ca_key_pair.pem -out csr_verification.csr
         ```
-        - Note: User can generate new keys or can use same CA keys generated in previous section to generate verification csr file.
+        > Note: User can generate new keys or can use same CA keys generated in previous section to generate verification csr file.
         - when prompted for distinguished names, common name must be provided as **Verification Code** , other fields can be skipped
     - Generate Verification certificate and sign it using X.509 CA certificate  
         ```sh
@@ -119,14 +128,14 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
 
 ### Creating an Azure IoT Device
 
-- Create an Azure IoT Hub by following steps under section **Create an X.509 device for your IoT hub** from the the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#create-an-x509-device-for-your-iot-hub).
+- Create an Azure IoT Hub by following steps under section **Create an X.509 device for your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#create-an-x509-device-for-your-iot-hub).
 - Note down newly created IoT Device **Device ID** 
 
-## Porting guide to enable OPTIGA™ Trust M on your MbedTLS package
+## Porting guide to enable OPTIGA™ Trust M on your mbedTLS package
 
-<a name="porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package"></a>
+<a name="porting-guide-to-enable-optiga™-trust-m-on-your-mbedtls-package"></a>
 
-- If you want to port Trust M onto any board where MbedTLS is used for crypto operation, you can follow the steps in documentation [here](https://github.com/Infineon/azure-optiga-trust-m/tree/master/docs).
+- If you want to port Trust M onto any board where mbedTLS is used for crypto operation, you can follow the steps in documentation [here](https://github.com/Infineon/azure-optiga-trust-m/tree/master/docs).
 
 ## Personalize OPTIGA™ Trust M Shield2Go
 
@@ -223,26 +232,17 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
     ![](docs/images/Esp32_connection_with_Shield2Go.jpg)
 
 - Follow this step only if Server root CA is loaded into any of OPTIGA data object 
-    - Enable macro "LOAD_TA_FROM_OPTIGA" in "esp-azure\examples\iothub_client_sample_mqtt\main\ iothub_client_sample_mqtt.c" file and define trust_anchor as optiga data object which is loaded with server root CA as below
+    - Enable macro "LOAD_TA_FROM_OPTIGA" in <azure-optiga-trust-m\examples\iothub_client_sample_mqtt\main\iothub_client_sample_mqtt.c> file by setting value as "1"
          ```sh
-        /* Enable LOAD_TA_FROM_OPTIGA if server root certificate is loaded in otpiga */
+        /* Enable LOAD_TA_FROM_OPTIGA if server root certificate is loaded in optiga */
         #define LOAD_TA_FROM_OPTIGA 0    // 1 = Enable, 0 = Disable
-        
-        #if LOAD_TA_FROM_OPTIGA
-        //Read trust anchor from OPTIGA
-        #define trust_anchor 0xE0E8
-        static char trust_anchor_pem [1300] = {0};
-        static uint16_t trust_anchor_pem_length = sizeof(trust_anchor_pem);
-        #endif
         ```
     - To enable server validation using OPTIGA, region specific server root CA certificate must be loaded in any of OPTIGA data object either by personalization or by writing to object using OPTIGA write API
     - To load trust anchor using OPTIGA write API, modify file <azure-optiga-trust-m\components\optiga\optiga\optiga_trust.c> as below
-        - Define OPTIGA_TA with optiga data object where server root CA requires to be loaded and define trust_anchor with region specific root CA in API "write_optiga_trust_anchor(void)"
-        - Note: user can either choose from available certificate or can provide specific certificate 
+        - User can choose the root CA as either from the below available certificate or can provide specific certificate by setting value as "1". E.g.:  #if 1
             ```sh
             static void write_optiga_trust_anchor(void)
             {
-            #define OPTIGA_TA 0xE0E8 
             #if 0
             	/* DigiCert Baltimore Root --Used Globally--*/
             	// This cert should be used when connecting to Azure IoT on the Azure Cloud available globally. 
@@ -289,7 +289,7 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
       	   //The below specified functions can be used to personalize OPTIGA w.r.t
 	        //certificates, Trust Anchors, etc.
 		
-            //write_device_certificate ();s
+            //write_device_certificate ();
             //write_set_high_performance();  //setting current limitation to 15mA
             //write_platform_binding_secret ();  
             //read_certificate ();
@@ -324,29 +324,37 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
     C:\Users\username\Desktop\esp-idf>
     ```
 - Change working directory to <azure-optiga-trust-m\examples\iothub_client_sample_mqtt>
-- Configure "example configuration" using below command
+- Configure "Example Configuration" and "OPTIGA(TM) Trust M config" using below command
 
     ```sh
     idf.py menuconfig
     ```
     ![](docs/images/menu_config_1.png)
 
-    - Select Example Configuration and update WiFi SSID, WiFi Password and IoT Hub device connection string 
-    
-        ![](docs/images/menu_config_2.png)
-    
-    - To get IoT Hub Device Connection String: 
-        - navigate to your IoT Hub, and then select Setting > shared Access policies > iothubowner
-        - Under shared access keys, copy connection string – primary key Ex: "HostName=**your_IoT_hub_name.azure-devices.net**;SharedAccessKeyName=iothubowner;SharedAccessKey=id9ublohj/CdVFb5jLS/9bF3hAfqE2TRpb4woDhlciM="
-        - Update Host name and device id name from the above step in the below connection string
-        ```bash 
-        "HostName=**your_IoT_hub_name.azure-devices.net**;DeviceId=[Device ID];x509=true"
-        ```
-        - Update the above connection string as IoT Hub Device Connection String in the Example Configuration
+- Select Example Configuration and update WiFi SSID, WiFi Password and IoT Hub device connection string 
 
+    ![](docs/images/menu_config_2.png)
+
+- To get IoT Hub Device Connection String: 
+    - navigate to your IoT Hub, and then select Setting > shared Access policies > iothubowner
+    - Under shared access keys, copy connection string – primary key E.g.: "HostName=**your_IoT_hub_name.azure-devices.net**;SharedAccessKeyName=iothubowner;SharedAccessKey=id9ublohj/CdVFb5jLS/9bF3hAfqE2TRpb4woDhlciM="
+    - Update Host name and device id name from the above step in the below connection string
+    ```bash 
+    "HostName=**your_IoT_hub_name.azure-devices.net**;DeviceId=[Device ID];x509=true"
+    ```
+    - Update the above connection string as IoT Hub Device Connection String in the Example Configuration and save the configuration
+- Go back to the main page of menuconfig and select "OPTIGA(TM) Trust M config" option and update the below parameters:
+
+    ![](docs/images/menu_config_3.png)
+    
+    - Select the certificate Slot out of 4 slots provided, where the device certificate is personalized
+    - Select the Private Key slot out of 4 slots provided, where the device private key is personalized
+    - Select the Trust Anchor slot out of 3 slots provided, where the Azure trust anchor is personalized 
+
+    ![](docs/images/menu_config_4.png)
 
 - Build Sample project and Flash ESP32 using below command 
-    ```bash
+    ```bash	
     idf.py build
     idf.py -p <ESP32 serial port> flash
         E.g.: idf.py -p com7 flash
@@ -357,7 +365,7 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
     E.g. : idf.py -B c:\esp-build build
          : idf.py -B c:\esp-build -p com7 flash
     ```
-- During Sample project, if you get an error as **ccache error : Failed to create temprorary file** then this is due to file path length restriction to 260 characters.To avoid this error, clone the Azure OPTIGA Trust M to the top level directory such as in C or D drive or use custom build folder as the top level directory as mentioned in above step
+> Note: During Sample project build, if you get an error as **ccache error : Failed to create temprorary file** then this is due to file path length restriction to 260 characters. To avoid this error, clone the Azure OPTIGA Trust M to the top level directory such as in C or D drive or use custom build folder as the top level directory as mentioned in above step
 - Once sample project is flashed successfully, you can monitor communication between ESP32 and your azure IoT Hub device using
     ```sh
     idf.py monitor
@@ -383,11 +391,10 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust
 1. Some common problems can be fixed by disabling the firewall.
 
 2. You can try with the followings, if your build fails:
-	- `$ git submodule update --init --recursive`
+	- `git submodule update --init --recursive`
 	- Check the compiler version and verify that it is the correct one for your ESP IDF version.
 	- Check if the IDF_PATH is set correctly
-	- Clean the project with `make clean` and if required, using `rm -rf build sdkconfig sdkconfig.old`
-	
+	- Clean the project with “idf.py fullclean”	
 3. Ensure that the device connection string received from Azure IoT Hub are correct.
 
 ## Contributing
@@ -395,3 +402,4 @@ Please read [CONTRIBUTING.md](https://github.com/Infineon/arduino-optiga-trust-x
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+

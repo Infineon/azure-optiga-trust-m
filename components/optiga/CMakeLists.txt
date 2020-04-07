@@ -1,7 +1,7 @@
 set(COMPONENT_ADD_INCLUDEDIRS "${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/optiga/include")
 
 set(COMPONENT_SRCS
-    "${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/optiga/optiga_trust.c"
+    "${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/examples/utilities/optiga_trust.c"
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/examples/mbedtls_port/trustm_ecdh.c"
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/examples/mbedtls_port/trustm_ecdsa.c"
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/examples/mbedtls_port/trustm_rsa.c"

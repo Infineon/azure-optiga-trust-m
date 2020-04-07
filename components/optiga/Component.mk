@@ -10,7 +10,8 @@ COMPONENT_SRCDIRS := optiga-trust-m/pal/esp32_freertos \
                      optiga-trust-m/optiga/comms \
                      optiga-trust-m/optiga/crypt \
                      optiga-trust-m/optiga/util \
-                     optiga-trust-m/examples\integration \
+                     optiga-trust-m/examples/mbedtls_port \
+					 optiga-trust-m/examples/utilities \
 					 optiga-trust-m/optiga \
 
 COMPONENT_SUBMODULES += mbedtls
