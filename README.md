@@ -135,7 +135,7 @@ git clone --recursive https://github.com/Infineon/personalize-optiga-trust.git
 
 <a name="porting-guide-to-enable-optiga™-trust-m-on-your-mbedtls-package"></a>
 
-- If you want to port Trust M onto any board where mbedTLS is used for crypto operation, you can follow the steps in documentation [here](https://github.com/Infineon/azure-optiga-trust-m/tree/master/docs).
+- If you want to port Trust M onto any board where mbedTLS is used for crypto operation, you can follow the steps in documentation [here](https://github.com/Infineon/azure-optiga-trust-m/blob/master/PortingGuide.md).
 
 ## Personalize OPTIGA™ Trust M Shield2Go
 
