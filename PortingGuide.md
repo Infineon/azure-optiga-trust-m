@@ -100,7 +100,7 @@ For more information refer to the [example_optiga_util_read_data.c](https://gith
 - #### RSA <br>
 
     This section explains about porting of RSA sign,verify,encrypt,decrypt API's. Entire “trustm_rsa.c” file must be guarded under macro [MBEDTLS_RSA_ALT](https://github.com/Infineon/optiga-trust-m/blob/d15dd7a0b4e23f2adac6cbd2cd0f924d0ab03197/examples/mbedtls_port/trustm_rsa.c\#L32)<br>
-
+    Once the macro "MBEDTLS_RSA_ALT" is enabled, mbedTLS expects rsa_alt.h header file. Create this file if not present alraedy and file should have [mbedtls_rsa_context](https://github.com/Infineon/optiga-trust-m/blob/fb662c7c208c4f3b321e604b04a55f7796beed13/examples/mbedtls_port/include/rsa_alt.h/#L59-L94)
     - [define TRUSTM_RSA_PRIVATE_KEY_OID (0xE0FC)](https://github.com/Infineon/optiga-trust-m/blob/d15dd7a0b4e23f2adac6cbd2cd0f924d0ab03197/examples/mbedtls_port/trustm_rsa.c/#L79)<br>
     This macro defines the RSA private key inOPTIGA™ Trust M used during RSA sign and RSA decrypt.
     - [static volatile optiga_lib_status_t crypt_event_completed_status;](https://github.com/Infineon/optiga-trust-m/blob/d15dd7a0b4e23f2adac6cbd2cd0f924d0ab03197/examples/mbedtls_port/trustm_rsa.c/#L98)<br>
