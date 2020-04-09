@@ -5,39 +5,31 @@
 This repository contains one of Application Notes for OPTIGA™ Trust M security chip.
 
 ## Table of contents
-- [Introduction](#introduction)
-- [Prerequisites](#prerequisites)
-- [Getting Started](#getting-started)
-- [Setting up Azure IoT Hub](#setting-up-azure-iot-hub)
-- [Porting guide to enable OPTIGA™ Trust M on your mbedTLS package](#porting-guide-to-enable-optiga™-trust-m-on-your-mbedtls-package)
-- [Personalize OPTIGA™ Trust M Shield2Go](#personalize-optiga-trust-m-shield2go)
-- [Configuring and Building Sample](#configuring-and-building-sample) 
-- [Troubleshooting](#troubleshooting) 
+* [Introduction](#introduction)
+* [Required Hardware and Software](#Required-Hardware-and-Software)
+* [Getting Started](#getting-started)
+  * [Step 1. Downlaod and install missing components](#Step-1-Downlaod-and-install-missing-components )
+  * [Step 2. Setting up Microsoft Azure IoT Hub](#Step-2-Setting-up-Microsoft-Azure-IoT-Hub)
+  * [Step 3. Creating an Azure IoT Device](#Step-3-Creating-an-Azure-IoT-Device)
+* [Porting guide to enable OPTIGA™ Trust M on your mbedTLS package](#porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package)
+* [Personalize OPTIGA™ Trust M Shield2Go](#personalize-optiga-trust-m-shield2go)
+* [Configuring and Building Sample](#configuring-and-building-sample) 
+* [Troubleshooting](#troubleshooting) 
 
 ## Introduction
 
-<a name="introduction"></a>
-
 The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows to connect Espressif ESP32 based devices to the Azure IoT hub using OPTIGA™ Trust M security chip for X.509 based security in Azure IoT hub. It provides some examples which can help to understand most common use cases.
 
-## Prerequisites
+## Required Hardware and Software 
 
-<a name="prerequisites"></a>
-
-### Hardware
-
-* OPTIGA Trust Personalization Board, alternatively you can use an FTDI FT260 equipped board, such as FTDI - FT260S/Q(TSSOP/WQFN) USB-to-I2C bridge
-* [OPTIGA Trust M Shield2Go](https://www.infineon.com/cms/en/product/evaluation-boards/s2go-security-optiga-m/)
-* [ESP32-DevKitC](https://www.espressif.com/en/products/hardware/development-boards)
-
-### Software
-
-- ESP-IDF
-- Certificates generation tool such as OpenSSL
+* **Hardware**
+  * [OPTIGA Trust M Shield2Go](https://www.infineon.com/cms/en/product/evaluation-boards/s2go-security-optiga-m/)
+  * [ESP32-DevKitC](https://www.espressif.com/en/products/hardware/development-boards)
+* **Software**
+  * ESP-IDF
+  * Certificates generation tool such as OpenSSL
 
 ## Getting Started
-
-<a name="get-started"></a>
 
 ### Step 1. Downlaod and install missing components 
 
