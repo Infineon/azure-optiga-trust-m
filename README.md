@@ -32,54 +32,43 @@ The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows t
 
 ### Software
 
-- ESP-IDF Tools version 2.3
+- ESP-IDF
 - Certificates generation tool such as OpenSSL
 
 ## Getting Started
 
 <a name="get-started"></a>
 
-### Development Host Setup
+### Downlaod ESP-IDF
 
-This project is to be used with Espressif's IoT Development Framework, [ESP IDF](https://github.com/espressif/esp-idf). Follow these steps to get started:
+ESP IDF stands for Espressif IoT Development Framework. The installation guidelines based on you setup can be found [here](ESP-IDF (Espressif IoT Development Framework)).
+Please try to build a sample ["Hello World"](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html#step-5-start-a-project) project before continuing.
 
-- Clone the ESP IDF development framework as follows 
+### Download this repository
 
-Open the Command Prompt, and run the following commands:
-
-``` bash
-git clone -b v4.1-beta1 --recursive https://github.com/espressif/esp-idf.git
-```
-- In addition to cloning the ESP IDF github, Download and install the ESP-IDF Tools Installer for Windows from below link
-    
-    [ESP-IDF Tools Installer](https://dl.espressif.com/dl/esp-idf-tools-setup-2.3.exe)
-
-> Note: Select ESP-IDF directory extracted in previous step while installing ESP-IDF Tools
-     
-![](docs/images/EspInstallation.png)
-     
-- After successful installation of ESP-IDF Tool, the installer creates an “ESP-IDF Command Prompt” shortcut in the Start Menu. This shortcut opens the Command Prompt and sets up all the required environment variables
-
-- In a separate folder, clone the Azure OPTIGA&trade; Trust M project as follows (please note the --recursive option, which is required to clone the various git submodules required by Azure OPTIGA&trade; Trust M)
+In a separate folder, clone the Azure OPTIGA&trade; Trust M project as follows
 
 ``` bash
 git clone --recursive https://github.com/Infineon/azure-optiga-trust-m
 ```
+**Note: the `--recursive` option is required to clone the various git submodules **
+** Note: if you ever change the branch or the git head of either esp-idf or esp-azure, ensure that all the submodules of the git repo are in sync by executing `git submodule update --init --recursive`**
 
-> Note that if you ever change the branch or the git head of either esp-idf or esp-azure, ensure that all the submodules of the git repo are in sync by executing `git submodule update --init --recursive`
 
-- Clone the personalize-optiga-trust package as follows
+### Download personalisation repository
+
+Clone the personalize-optiga-trust package as follows
 
 ``` bash
-git clone --recursive https://github.com/Infineon/personalize-optiga-trust.git
+git clone https://github.com/Infineon/personalize-optiga-trust.git
 ```
-- Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL can be downloaded from below link
 
-    [Openssl EXE](https://slproweb.com/products/Win32OpenSSL.html)
+### Download and install OpenSSL
 
-## Setting up Azure IoT Hub
+Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL for Windows can be downloaded [here](https://slproweb.com/products/Win32OpenSSL.html). For other OS please find the relevant installer for you in Internet.
+If you work from Windows and you do have [https://gitforwindows.org/](https://gitforwindows.org/) or a similar too installed, check the "git bash" tool. It should have openssl installed.
 
-<a name="setting-up-azure-iot-hub"></a>
+## Setting up Microsoft Azure IoT Hub
 
 ### Create an IoT Hub using the Azure portal
 
