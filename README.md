@@ -20,6 +20,10 @@ The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows t
 * **Hardware**
   * [OPTIGA Trust M Shield2Go](https://www.infineon.com/cms/en/product/evaluation-boards/s2go-security-optiga-m/)
   * [ESP32-DevKitC](https://www.espressif.com/en/products/hardware/development-boards)
+  <details>
+	<summary>Connection example</summary>
+	<img src="docs/images/Esp32_connection_with_Shield2Go.jpg" >
+  </details>
 * **Software**
   * ESP-IDF
   * Certificates generation tool such as OpenSSL
@@ -188,10 +192,6 @@ If you work from Windows and you do have [https://gitforwindows.org/](https://gi
     Certificate has been written
     ```
 ## Configuring and Building Sample
-
-- Connect OPTIGA Trust M Shield2Go with ESP32 to your PC via USB cable. Note the serial port where ESP32 board is connected.
-
-    ![](docs/images/Esp32_connection_with_Shield2Go.jpg)
 
 - Open the file **"optiga_lib_config.h"** present in the below given path and update the value of macro **"OPTIGA_COMMS_DEFAULT_RESET_TYPE"** to **"1"** 
     ```sh
