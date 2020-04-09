@@ -15,18 +15,16 @@
 
 The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows to connect Espressif ESP32 based devices to the Azure IoT hub using OPTIGA™ Trust M security chip for X.509 based security in Azure IoT hub. It provides some examples which can help to understand most common use cases.
 
-## Required Hardware and Software 
+## Hardware
 
-* **Hardware**
   * [OPTIGA Trust M Shield2Go](https://www.infineon.com/cms/en/product/evaluation-boards/s2go-security-optiga-m/)
   * [ESP32-DevKitC](https://www.espressif.com/en/products/hardware/development-boards)
   <details>
 	<summary>Connection example</summary>
 	<img src="docs/images/Esp32_connection_with_Shield2Go.jpg" >
   </details>
-* **Software**
-  * ESP-IDF
-  * Certificates generation tool such as OpenSSL
+  
+This Application Note uses Espressif ESP32, but it also shows how to port onto another host platform. YOu can find more information [below](#porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package) 
 
 ## Getting Started
 
