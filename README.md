@@ -47,17 +47,14 @@ The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows t
   ``` bash
   git clone --recursive https://github.com/Infineon/azure-optiga-trust-m
   ```
-  **Note: the `--recursive` option is required to clone the various git submodules **
-  ** Note: if you ever change the branch or the git head of either esp-idf or esp-azure, ensure that all the submodules of the git repo   are in sync by executing `git submodule update --init --recursive`**
-
 3. **Personalisation repository**. Clone the `personalize-optiga-trust` package as follows
   ``` bash
   git clone https://github.com/Infineon/personalize-optiga-trust.git
   ```
-4. **OpenSSL**. Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL for Windows can be downloaded [here](https://slproweb.com/products/Win32OpenSSL.html). For other OS please find the relevant installer for you in Internet.
+4. **OpenSSL**. Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL for Windows can be   downloaded [here](https://slproweb.com/products/Win32OpenSSL.html). For other OS please find the relevant installer for you in Internet.
 If you work from Windows and you do have [https://gitforwindows.org/](https://gitforwindows.org/) or a similar too installed, check the "git bash" tool. It should have openssl installed.
 
-## Setting up Microsoft Azure IoT Hub
+## Step 2. Setting up Microsoft Azure IoT Hub
 
 ### Create an IoT Hub using the Azure portal
 
@@ -104,7 +101,7 @@ If you work from Windows and you do have [https://gitforwindows.org/](https://gi
   - Go to Certificate Details in Azure portal, under Verification Certificate .pem or .cer file, find and upload the generated verification certificate file (Verification_Cer.cer), then select Verify 
   - Ensure that status of your certificate updated to **Verified**
 
-### Creating an Azure IoT Device
+## Step 3. Creating an Azure IoT Device
 
 - Create an Azure IoT Hub by following steps under section **Create an X.509 device for your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#create-an-x509-device-for-your-iot-hub).
 - Note down newly created IoT Device **Device ID** 
