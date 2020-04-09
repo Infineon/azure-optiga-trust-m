@@ -1,10 +1,5 @@
 # Microsoft Azure IoT Integration with </br> the Infineon OPTIGA&trade; Trust M 
 
-## Description
-
-This repository contains one of Application Notes for OPTIGA™ Trust M security chip.
-
-## Table of contents
 * [Introduction](#introduction)
 * [Required Hardware and Software](#Required-Hardware-and-Software)
 * [Getting Started](#getting-started)
