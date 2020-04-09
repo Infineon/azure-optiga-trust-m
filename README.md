@@ -39,33 +39,22 @@ The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows t
 
 <a name="get-started"></a>
 
-### Downlaod ESP-IDF
+### Step 1. Downlaod and install missing components 
 
-ESP IDF stands for Espressif IoT Development Framework. The installation guidelines based on you setup can be found [here](ESP-IDF (Espressif IoT Development Framework)).
-Please try to build a sample ["Hello World"](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html#step-5-start-a-project) project before continuing.
+1. **ESP-IDF** .ESP IDF stands for Espressif IoT Development Framework. The installation guidelines based on you setup can be found [here](ESP-IDF (Espressif IoT Development Framework)). Please try to build a sample ["Hello World"](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html#step-5-start-a-project) project before continuing.
 
-### Download this repository
+2. **This repository**
+  ``` bash
+  git clone --recursive https://github.com/Infineon/azure-optiga-trust-m
+  ```
+  **Note: the `--recursive` option is required to clone the various git submodules **
+  ** Note: if you ever change the branch or the git head of either esp-idf or esp-azure, ensure that all the submodules of the git repo   are in sync by executing `git submodule update --init --recursive`**
 
-In a separate folder, clone the Azure OPTIGA&trade; Trust M project as follows
-
-``` bash
-git clone --recursive https://github.com/Infineon/azure-optiga-trust-m
-```
-**Note: the `--recursive` option is required to clone the various git submodules **
-** Note: if you ever change the branch or the git head of either esp-idf or esp-azure, ensure that all the submodules of the git repo are in sync by executing `git submodule update --init --recursive`**
-
-
-### Download personalisation repository
-
-Clone the personalize-optiga-trust package as follows
-
-``` bash
-git clone https://github.com/Infineon/personalize-optiga-trust.git
-```
-
-### Download and install OpenSSL
-
-Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL for Windows can be downloaded [here](https://slproweb.com/products/Win32OpenSSL.html). For other OS please find the relevant installer for you in Internet.
+3. **Personalisation repository**. Clone the `personalize-optiga-trust` package as follows
+  ``` bash
+  git clone https://github.com/Infineon/personalize-optiga-trust.git
+  ```
+4. **OpenSSL**. Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL for Windows can be downloaded [here](https://slproweb.com/products/Win32OpenSSL.html). For other OS please find the relevant installer for you in Internet.
 If you work from Windows and you do have [https://gitforwindows.org/](https://gitforwindows.org/) or a similar too installed, check the "git bash" tool. It should have openssl installed.
 
 ## Setting up Microsoft Azure IoT Hub
