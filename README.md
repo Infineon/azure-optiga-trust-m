@@ -24,7 +24,7 @@ The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows t
 	<img src="docs/images/Esp32_connection_with_Shield2Go.jpg" >
   </details>
   
-This Application Note uses Espressif ESP32, but it also shows how to port onto another host platform. YOu can find more information [below](#porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package) 
+This Application Note uses Espressif ESP32, but it also shows how to port onto another host platform. You can find more information [below](#porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package) 
 
 ## Getting Started
 
