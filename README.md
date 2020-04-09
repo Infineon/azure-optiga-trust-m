@@ -36,12 +36,6 @@ This Application Note uses Espressif ESP32, but it also shows how to port onto a
   ``` bash
   git clone --recursive https://github.com/Infineon/azure-optiga-trust-m
   ```
-3. **Personalisation repository**. Clone the `personalize-optiga-trust` package as follows
-  ``` bash
-  git clone https://github.com/Infineon/personalize-optiga-trust.git
-  ```
-4. **OpenSSL**. Install OpenSSL which is used as an example to generate certificate in this document. OpenSSL for Windows can be   downloaded [here](https://slproweb.com/products/Win32OpenSSL.html). For other OS please find the relevant installer for you in Internet.
-If you work from Windows and you do have [https://gitforwindows.org/](https://gitforwindows.org/) or a similar too installed, check the "git bash" tool. It should have openssl installed.
 
 ## Step 2. Setting up Microsoft Azure IoT Hub
 
@@ -52,43 +46,11 @@ If you work from Windows and you do have [https://gitforwindows.org/](https://gi
 
 > **Note: When selecting the "Pricing and scale tier", there is also an option to select , F1: Free tier, which should be sufficient for basic evaluation.**
 
-### Register and Authenticate X.509 CA certificate to IoT Hub
+### Create a CA certificate for Azure IoT Hub
 
-- Generate X.509 CA certificate using tools such as OpenSSL. To generate CA certificate using OpenSSL, execute the below commands
-    - Generate CA private key
+For this please follow first **three** steps from the [guidance below](https://github.com/Azure/azure-iot-sdk-c/blob/master/tools/CACertificates/CACertificateOverview.md), namelly "Step 1 - Initial Setup", and "Step 2 - Create the certificate chain", and "Step 3 - Proof of Possession".
 
-    ``` bash
-    openssl ecparam -name prime256v1 -genkey -noout –out ca_key_pair.pem
-    ```
-    - Generate Certificate Signing Request
-
-    ``` bash
-    openssl req -new -key ca_key_pair.pem -out csr_ca.csr
-    ```
-    - Generate self-signed CA Certificate
-
-    ``` bash
-    openssl req -x509 -sha256 -days 365 -key ca_key_pair.pem -in csr_ca.csr -out ca_cert.cer
-    ```
-    - During execution of second command, You will be prompted to give Distinguished Names(DN). Common Name (CN) is mandatory field in DN details. Give any user-friendly common name for csr generation, other fields can be skipped
-    - parameter "-out" is used to generate output as per user defined name
-    - After execution of third command, user defined CA certificate will be generated (ca_cert.cer)
-
-### Register X.509 CA certificate to your IoT Hub through azure portal
-
-- Register a CA certificate to the IoT Hub created in the above step by following steps 1 to 6 under section **Register X.509 CA certificates to your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#register-x509-ca-certificates-to-your-iot-hub) and copy the generated  **Verification Code**
-    - Using the Verification code from the above step, Create .csr(csr_verification.csr) file to generate verification certificate which is required to verify X.509 CA certificate.
-        ```sh
-         openssl req -new -key ca_key_pair.pem -out csr_verification.csr
-        ```
-        > Note: User can generate new keys or can use same CA keys generated in previous section to generate verification csr file.
-        - when prompted for distinguished names, common name must be provided as **Verification Code** , other fields can be skipped
-    - Generate Verification certificate and sign it using X.509 CA certificate  
-        ```sh
-        openssl x509 -req -in csr_verification.csr -CA ca_cert.cer -CAkey ca_key_pair.pem -CAcreateserial -out Verification_Cer.cer -days 500 -sha256
-        ```
-  - Go to Certificate Details in Azure portal, under Verification Certificate .pem or .cer file, find and upload the generated verification certificate file (Verification_Cer.cer), then select Verify 
-  - Ensure that status of your certificate updated to **Verified**
+### Create a new device
 
 ## Step 3. Creating an Azure IoT Device
 
