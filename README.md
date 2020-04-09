@@ -63,7 +63,7 @@ git clone -b v4.1-beta1 --recursive https://github.com/espressif/esp-idf.git
 - In a separate folder, clone the Azure OPTIGA&trade; Trust M project as follows (please note the --recursive option, which is required to clone the various git submodules required by Azure OPTIGA&trade; Trust M)
 
 ``` bash
-git clone --recursive Need to be updated
+git clone --recursive https://github.com/Infineon/azure-optiga-trust-m
 ```
 
 > Note that if you ever change the branch or the git head of either esp-idf or esp-azure, ensure that all the submodules of the git repo are in sync by executing `git submodule update --init --recursive`
