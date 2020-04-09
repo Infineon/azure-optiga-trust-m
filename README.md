@@ -50,9 +50,8 @@ This Application Note uses Espressif ESP32, but it also shows how to port onto a
 
 For this please follow first **three** steps from the [guidance below](https://github.com/Azure/azure-iot-sdk-c/blob/master/tools/CACertificates/CACertificateOverview.md), namelly "Step 1 - Initial Setup", and "Step 2 - Create the certificate chain", and "Step 3 - Proof of Possession".
 
-### Create a new device
 
-## Step 3. Creating an Azure IoT Device
+## Step 3. Creating a new Azure IoT Device
 
 - Create an Azure IoT Hub by following steps under section **Create an X.509 device for your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#create-an-x509-device-for-your-iot-hub).
 - Note down newly created IoT Device **Device ID** 
