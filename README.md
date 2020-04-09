@@ -18,7 +18,7 @@ This repository contains one of Application Notes for OPTIGA™ Trust M security
 
 <a name="introduction"></a>
 
-The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and enable users to connect their ESP32 based devices to the Azure IoT hub using OPTIGA™ Trust M security chip for X.509 based security in Azure IoT hub. It provides some examples which can help to understand most common use cases.
+The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows to connect Espressif ESP32 based devices to the Azure IoT hub using OPTIGA™ Trust M security chip for X.509 based security in Azure IoT hub. It provides some examples which can help to understand most common use cases.
 
 ## Prerequisites
 
