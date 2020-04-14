@@ -6,7 +6,7 @@
   * [Step 1. Downlaod and install missing components](#Step-1-Downlaod-and-install-missing-components )
   * [Step 2. Setting up Microsoft Azure IoT Hub](#Step-2-Setting-up-Microsoft-Azure-IoT-Hub)
   * [Step 3. Configuring and Building Sample](#Step-3-configuring-and-building-sample)
-* [Porting guide](PortingGuide.md)
+* [Porting guide for mbedTLS](PortingGuide.md)
 * [Troubleshooting](#troubleshooting)
 * [Contributing](#Contributing)
 * [License](#License)
