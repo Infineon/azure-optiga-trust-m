@@ -6,7 +6,7 @@
   * [Step 1. Downlaod and install missing components](#Step-1-Downlaod-and-install-missing-components )
   * [Step 2. Setting up Microsoft Azure IoT Hub](#Step-2-Setting-up-Microsoft-Azure-IoT-Hub)
   * [Step 3. Configuring and Building Sample](#Step-3-configuring-and-building-sample)
-* [Porting guide to enable OPTIGA™ Trust M on your mbedTLS package](#porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package)
+* [Porting guide](PortingGuide.md)
 * [Troubleshooting](#troubleshooting)
 * [Contributing](#Contributing)
 * [License](#License)
