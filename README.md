@@ -66,6 +66,87 @@ For this please follow first **three** steps from the [guidance below](https://g
 
 Now it becomes possible to provision your device with a new X.509 certificate and create a new Azure IoT Device.
 
+### Creating a test X.509 device certificate
+
+- Go to windows start menu and Open ESP-IDF command prompt
+
+    <details><summary>Sample output</summary>
+    ```bash
+    Setting IDF_PATH: C:\Users\username\Desktop\esp-idf
+    
+    Adding ESP-IDF tools to PATH...
+        C:\Users\username\.espressif\tools\xtensa-esp32-elf\esp-2019r2-8.2.0\xtensa-esp32-elf\bin
+        C:\Users\username\.espressif\tools\esp32ulp-elf\2.28.51.20170517\esp32ulp-elf-binutils\bin
+        C:\Users\username\.espressif\tools\cmake\3.13.4\bin
+        C:\Users\username\.espressif\tools\openocd-esp32\v0.10.0-esp32-20190313\openocd-esp32\bin
+        C:\Users\username\.espressif\tools\mconf\v4.6.0.0-idf-20190628\
+        C:\Users\username\.espressif\tools\ninja\1.9.0\
+        C:\Users\username\.espressif\tools\idf-exe\1.0.1\
+        C:\Users\username\.espressif\tools\ccache\3.7\
+        C:\Users\username\.espressif\python_env\idf4.0_py3.7_env\Scripts
+        C:\Users\username\Desktop\esp-idf\tools
+    
+    Checking if Python packages are up to date...
+    Python requirements from C:\Users\username\Desktop\esp-idf\requirements.txt are satisfied.
+    
+    Done! You can now compile ESP-IDF projects.
+    Go to the project directory and run:
+    
+    idf.py build
+    
+    
+    C:\Users\username\Desktop\esp-idf>
+    ```
+    </details>
+- Change working directory to <azure-optiga-trust-m\examples\provision_test_certificate>
+- Configure "Example Configuration" using below command
+
+    ```sh
+    idf.py menuconfig
+    ```
+- Build Personalisation project and Flash ESP32 using below command 
+    ```bash	
+    idf.py build
+    idf.py -p <ESP32 serial port> flash
+        E.g.: idf.py -p com7 flash
+
+    //Custom build folder
+    idf.py -B <CUSTOM_BUILD_FOLDER> build    
+    idf.py -B <CUSTOM_BUILD_FOLDER> -p <ESP32 serial port> flash
+    E.g. : idf.py -B c:\esp-build build
+         : idf.py -B c:\esp-build -p com7 flash
+    ```
+- Once sample project is flashed successfully, you can monitor communication between ESP32 using
+    ```sh
+    idf.py monitor
+    ```
+
+* Public Key Extraction
+  The demo project starts with generating a new keypair, where the private part stays on the secure element, and the public component   is printed out. You should be able to see something like this
+  ```bash
+  Device public key:
+  -----BEGIN PUBLIC KEY-----
+  MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEzWVpzrgbuR5yM5/oz2DvD5+0czOs
+  bxkYE2mZP6DCk1+uCPEa0EG3NFznRhBGIo5aX9eH1XHcsk6NdbMlhuLMDA==
+  -----END PUBLIC KEY-----
+  ```
+  Copy the lines of key into a file called `device_public_key.pem`.
+* Public Key Infrastructure Setup
+  If you have completed [this](#Create-a-CA-certificate-for-Azure-IoT-Hub) step, you should have either `.\RootCA.pem` in Windows or `./certs/azure-iot-test-only.root.ca.cert.pem` in Bash.
+  Now type in the following command using OpenSSL:
+  ```bash
+  openssl genrsa -out tempCsrSigner.key 2048
+  openssl req -new -key tempCsrSigner.key -out deviceCert.csr
+  ```
+  For Bash
+  ```bash
+  openssl x509 -req -in deviceCert.csr -CA ./certs/azure-iot-test-only.root.ca.cert.pem -CAkey ./private/azure-iot-test-only.root.ca.cert.pem -CAcreateserial -out deviceCert.pem -days 500 -sha256 -force_pubkey device_public_key.pem 
+  ```
+  For Powershell
+  ```bash
+  openssl x509 -req -in deviceCert.csr -CA .\certs\azure-iot-test-only.root.ca.cert.pem -CAkey .\private\azure-iot-test-only.root.ca.cert.pem -CAcreateserial -out deviceCert.pem -days 500 -sha256 -force_pubkey device_public_key.pem
+  ```
+* Writing back the new certificate
 ### Creating a new Azure IoT Device
 
 - Create an Azure IoT Hub by following steps under section **Create an X.509 device for your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#create-an-x509-device-for-your-iot-hub).
@@ -144,6 +225,8 @@ Now it becomes possible to provision your device with a new X.509 certificate an
             ```
 
 - Go to windows start menu and Open ESP-IDF command prompt
+
+    <details><summary>Sample output</summary>
     ```bash
     Setting IDF_PATH: C:\Users\username\Desktop\esp-idf
     
@@ -170,6 +253,7 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     
     C:\Users\username\Desktop\esp-idf>
     ```
+    </details>
 - Change working directory to <azure-optiga-trust-m\examples\iothub_client_sample_mqtt>
 - Configure "Example Configuration" and "OPTIGA(TM) Trust M config" using below command
 
