@@ -1,7 +1,7 @@
 # Microsoft Azure IoT with </br> Infineon OPTIGA&trade; Trust M 
 
 * [Introduction](#introduction)
-* [Required Hardware and Software](#Required-Hardware-and-Software)
+* [Hardware](#Hardware)
 * [Getting Started](#getting-started)
   * [Step 1. Downlaod and install missing components](#Step-1-Downlaod-and-install-missing-components )
   * [Step 2. Setting up Microsoft Azure IoT Hub](#Step-2-Setting-up-Microsoft-Azure-IoT-Hub)
