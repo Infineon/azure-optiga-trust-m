@@ -168,7 +168,10 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     - To enable server validation using OPTIGA, region specific server root CA certificate must be loaded in any of OPTIGA data object either by personalization or by writing to object using OPTIGA write API
     - To load trust anchor using OPTIGA write API, modify file <azure-optiga-trust-m\components\optiga\optiga-trust-m\examples\utilities\optiga_trust.c> as below
         - User can choose the root CA as either from the below available certificate or can provide specific certificate by setting value as "1". E.g.:  #if 1
-            ```sh
+        <details>
+        <summary>Code fragment </summary>
+            
+	    ```c
             static void write_optiga_trust_anchor(void)
             {
             #if 0
@@ -211,7 +214,9 @@ Now it becomes possible to provision your device with a new X.509 certificate an
             
             }
             ```
-         
+            
+	    </details>
+	    
         - Uncomment write_optiga_trust_anchor in API "optiga_trust_init(void)" as below:
             ```sh
       	   //The below specified functions can be used to personalize OPTIGA w.r.t
@@ -226,7 +231,9 @@ Now it becomes possible to provision your device with a new X.509 certificate an
 
 - Go to windows start menu and Open ESP-IDF command prompt
 
-    <details><summary>Sample output</summary>
+    <details>
+	<summary>Sample output</summary>
+    
     ```bash
     Setting IDF_PATH: C:\Users\username\Desktop\esp-idf
     
