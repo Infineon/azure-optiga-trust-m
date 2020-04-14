@@ -144,7 +144,7 @@ For this please follow first **three** steps from the [guidance below](https://g
     Loaded: liboptigatrust-libusb-win-amd64.dll
     Certificate has been written
     ```
-## Configuring and Building Sample
+## Step 3. Configuring and Building Sample
 
 - Open the file **"optiga_lib_config.h"** present in the below given path and update the value of macro **"OPTIGA_COMMS_DEFAULT_RESET_TYPE"** to **"1"** 
     ```sh
