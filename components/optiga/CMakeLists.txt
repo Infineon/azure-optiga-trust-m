@@ -43,7 +43,7 @@ target_compile_definitions(mbedcrypto PUBLIC
 	-DMBEDTLS_ECDH_COMPUTE_SHARED_ALT
 	-DMBEDTLS_ECDSA_VERIFY_ALT
 	-DMBEDTLS_ECDSA_SIGN_ALT
-	-DMBEDTLS_RSA_ALT
+	#-DMBEDTLS_RSA_ALT
 )
 
 target_include_directories(mbedcrypto PUBLIC
