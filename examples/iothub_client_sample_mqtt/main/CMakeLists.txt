@@ -5,4 +5,5 @@ set(COMPONENT_ADD_INCLUDEDIRS ".")
 
 register_component()
 
-component_compile_definitions(SET_TRUSTED_CERT_IN_SAMPLES)
+#component_compile_definitions(SET_TRUSTED_CERT_IN_SAMPLES)
+#component_compile_definitions(LOAD_TA_FROM_OPTIGA)

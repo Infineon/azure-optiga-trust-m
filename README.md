@@ -111,8 +111,8 @@ Now it becomes possible to provision your device with a new X.509 certificate an
         E.g.: idf.py -p com7 flash
 
     //Custom build folder
-    idf.py -B <CUSTOM_BUILD_FOLDER> build    
-    idf.py -B <CUSTOM_BUILD_FOLDER> -p <ESP32 serial port> flash
+    idf.py -B <CUSTOM_BUILD_FOLDER_PATH> build    
+    idf.py -B <CUSTOM_BUILD_FOLDER_PATH> -p <ESP32 serial port> flash
     E.g. : idf.py -B c:\esp-build build
          : idf.py -B c:\esp-build -p com7 flash
     ```
@@ -159,15 +159,21 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     ```sh
     File path : azure-optiga-trust-m\components\optiga\optiga-trust-m\optiga\include\optiga
     ```
-- Follow this step only if Server root CA is loaded into any of OPTIGA data object 
-    - Enable macro "LOAD_TA_FROM_OPTIGA" in <azure-optiga-trust-m\examples\iothub_client_sample_mqtt\main\iothub_client_sample_mqtt.c> file by setting value as "1"
-         ```sh
-        /* Enable LOAD_TA_FROM_OPTIGA if server root certificate is loaded in optiga */
-        #define LOAD_TA_FROM_OPTIGA 0    // 1 = Enable, 0 = Disable
+- Follow this step only if Server root CA need to be loaded into any of OPTIGA data object.This certficate will be used for Authentication in TLS session. 
+    - Comment the macro **-DMBEDTLS_RSA_ALT** from the Cmakelist.txt file present in the path <azure-optiga-trust-m\components\optiga> as shown below
+        ```sh
+        #-DMBEDTLS_RSA_ALT
         ```
-    - To enable server validation using OPTIGA, region specific server root CA certificate must be loaded in any of OPTIGA data object either by personalization or by writing to object using OPTIGA write API
+        >Note: Since OPTIGA™ Trust M supports only RSA 1024/2048 and Azure Certificate chain has RSA 4096 certificate, the certificate path validation cannot be performed using OPTIGA™ Trust M RSA feature. Hence usage of RSA feature from OPTIGA™ Trust M need to be disabled. 
+    - Enable the macro **SET_TRUSTED_CERT_IN_SAMPLES** and **LOAD_TA_FROM_OPTIGA** from the Cmakelist.txt file present in the path <azure-optiga-trust-m2\examples\iothub_client_sample_mqtt\main> by uncommenting the compile time definitions as below.
+        ```sh
+        component_compile_definitions(SET_TRUSTED_CERT_IN_SAMPLES)
+        component_compile_definitions(LOAD_TA_FROM_OPTIGA)
+        ```
+    - To enable server certficate validation using OPTIGA, the region specific server root CA certificate must be loaded in any of OPTIGA data object either by personalization or by writing to object using OPTIGA write API
     - To load trust anchor using OPTIGA write API, modify file <azure-optiga-trust-m\components\optiga\optiga-trust-m\examples\utilities\optiga_trust.c> as below
         - User can choose the root CA as either from the below available certificate or can provide specific certificate by setting value as "1". E.g.:  #if 1
+        By default user can select the **DigiCert Baltimore Root** certificate as it is used Globally as Root Server CA.
         <details>
         <summary>Code fragment </summary>
             
@@ -217,17 +223,17 @@ Now it becomes possible to provision your device with a new X.509 certificate an
             
 	    </details>
 	    
-        - Uncomment write_optiga_trust_anchor in API "optiga_trust_init(void)" as below:
-            ```sh
-      	   //The below specified functions can be used to personalize OPTIGA w.r.t
-	        //certificates, Trust Anchors, etc.
-		
-            //write_device_certificate ();
-            //write_set_high_performance();  //setting current limitation to 15mA
-            //write_platform_binding_secret ();  
-            //read_certificate ();
-    	    //write_optiga_trust_anchor();  //can be used to write server root certificate to optiga data object  
-            ```
+    - Uncomment **write_optiga_trust_anchor** in API "optiga_trust_init(void)" as below:
+        ```sh
+        //The below specified functions can be used to personalize OPTIGA w.r.t
+        //certificates, Trust Anchors, etc.
+    
+        //write_device_certificate ();
+        //write_set_high_performance();  //setting current limitation to 15mA
+        //write_platform_binding_secret ();  
+        //read_certificate ();
+        write_optiga_trust_anchor();  //can be used to write server root certificate to optiga data object  
+        ```
 
 - Go to windows start menu and Open ESP-IDF command prompt
 
@@ -269,18 +275,19 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     ```
     ![](docs/images/menu_config_1.png)
 
-- Select Example Configuration and update WiFi SSID, WiFi Password and IoT Hub device connection string 
-
-    ![](docs/images/menu_config_2.png)
+- Select Example Configuration and update WiFi SSID, WiFi Password and IoT Hub device connection string
 
 - To get IoT Hub Device Connection String: 
     - navigate to your IoT Hub, and then select Setting > shared Access policies > iothubowner
-    - Under shared access keys, copy connection string – primary key E.g.: "HostName=**your_IoT_hub_name.azure-devices.net**;SharedAccessKeyName=iothubowner;SharedAccessKey=id9ublohj/CdVFb5jLS/9bF3hAfqE2TRpb4woDhlciM="
-    - Update Host name and device id name from the above step in the below connection string
+    - Under shared access keys, copy connection string – primary key E.g.: "HostName=**IoT_hub_name.azure-devices.net**;SharedAccessKeyName=iothubowner;SharedAccessKey=id9ublohj/CdVFb5jLS/9bF3hAfqE2TRpb4woDhlciM="
+    - Update Host name from the above step and device id noted down during Azure IoT device creation in the below connection string
     ```bash 
-    "HostName=**your_IoT_hub_name.azure-devices.net**;DeviceId=[Device ID];x509=true"
+    "HostName=**your_IoT_hub_name.azure-devices.net**;DeviceId=**Azure_Device_ID**;x509=true"
     ```
     - Update the above connection string as IoT Hub Device Connection String in the Example Configuration and save the configuration
+
+    ![](docs/images/menu_config_2.png)
+
 - Go back to the main page of menuconfig and select "OPTIGA(TM) Trust M config" option and update the below parameters:
 
     ![](docs/images/menu_config_3.png)
@@ -332,7 +339,7 @@ Now it becomes possible to provision your device with a new X.509 certificate an
 	- `git submodule update --init --recursive`
 	- Check the compiler version and verify that it is the correct one for your ESP IDF version.
 	- Check if the IDF_PATH is set correctly
-	- Clean the project with “idf.py fullclean”	
+	- Clean the project with “idf.py fullclean” or for custom build with “idf.py -B <CUSTOM_BUILD_FOLDER_PATH> fullclean”
 3. Ensure that the device connection string received from Azure IoT Hub are correct.
 
 ## Contributing

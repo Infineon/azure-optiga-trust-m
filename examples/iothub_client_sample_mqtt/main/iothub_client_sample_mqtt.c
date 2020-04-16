@@ -37,10 +37,7 @@ static const char* connectionString = EXAMPLE_IOTHUB_CONNECTION_STRING;
 static char device_certificate_pem [1200] = {0};
 static uint16_t device_certificate_pem_length = sizeof(device_certificate_pem);
 
-/* Enable LOAD_TA_FROM_OPTIGA if server root certificate is loaded in otpiga */
-#define LOAD_TA_FROM_OPTIGA 0    // 1 = Enable, 0 = Disable
-
-#if LOAD_TA_FROM_OPTIGA
+#ifdef LOAD_TA_FROM_OPTIGA
 //Read trust anchor from OPTIGA
 static char trust_anchor_pem [1300] = {0};
 static uint16_t trust_anchor_pem_length = sizeof(trust_anchor_pem);
@@ -186,7 +183,7 @@ void iothub_client_sample_mqtt_run(void)
             // Setting the Trusted Certificate.  This is only necessary on system with without
             // built in certificate stores.
 #ifdef SET_TRUSTED_CERT_IN_SAMPLES
-            #if LOAD_TA_FROM_OPTIGA
+            #ifdef LOAD_TA_FROM_OPTIGA
 			/*Trust Anchor is required to validate server
 			below api requires server root certificate to be pre-loaded in data object (optiga trust anchor)
 			provide oid where server CA is loaded Ex:0xE0E8 */
