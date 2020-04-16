@@ -71,6 +71,7 @@ Now it becomes possible to provision your device with a new X.509 certificate an
 - Go to windows start menu and Open ESP-IDF command prompt
 
     <details><summary>Sample output</summary>
+	
     ```bash
     Setting IDF_PATH: C:\Users\username\Desktop\esp-idf
     
