@@ -24,13 +24,13 @@ The ESP Azure OPTIGA™ Trust M package is based on Azure IoT C SDK and allows t
 	<img src="docs/images/Esp32_connection_with_Shield2Go.jpg" >
   </details>
   
-This Application Note uses Espressif ESP32, but it also shows how to port onto another host platform. You can find more information [below](#porting-guide-to-enable-optiga-trust-m-on-your-mbedtls-package) 
+This Application Note uses Espressif ESP32, but it also shows how to port onto another host platform. You can find more information [below](PortingGuide.md) 
 
 ## Getting Started
 
 ### Step 1. Downlaod and install missing components 
 
-1. **ESP-IDF ver. 4.1** .ESP IDF stands for Espressif IoT Development Framework. The installation guidelines based on you setup can be found [here](ESP-IDF (Espressif IoT Development Framework)). Please try to build a sample ["Hello World"](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html#step-5-start-a-project) project before continuing.
+1. **ESP-IDF ver. 4.1** .ESP IDF stands for Espressif IoT Development Framework. The installation guidelines based on you setup can be found [here](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html#installation-step-by-step). Please try to build a sample ["Hello World"](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/index.html#step-5-start-a-project) project before continuing.
 
 2. **This repository**
   ``` bash
@@ -62,7 +62,7 @@ You may choose any of the following ways to get your certificates:
 ```
 The OPTIGA Trust M board comes with a [pre-provisioned unique X.509 certificate](https://github.com/Infineon/optiga-trust-m/tree/master/certificates), which correspond to the first option, but for testing we advice to provision a new test X.509 certificate **to the secure element** uwing a third-party tool such as OpenSSL.
 
-For this please follow first **three** steps from the [guidance below](https://github.com/Azure/azure-iot-sdk-c/blob/master/tools/CACertificates/CACertificateOverview.md), namelly "Step 1 - Initial Setup", and "Step 2 - Create the certificate chain", and "Step 3 - Proof of Possession".
+For this please follow first **three** steps from the [guidance](https://github.com/Azure/azure-iot-sdk-c/blob/master/tools/CACertificates/CACertificateOverview.md), namelly "Step 1 - Initial Setup", and "Step 2 - Create the certificate chain", and "Step 3 - Proof of Possession".
 
 Now it becomes possible to provision your device with a new X.509 certificate and create a new Azure IoT Device.
 
@@ -71,6 +71,7 @@ Now it becomes possible to provision your device with a new X.509 certificate an
 - Go to windows start menu and Open ESP-IDF command prompt
 
     <details><summary>Sample output</summary>
+	
     ```bash
     Setting IDF_PATH: C:\Users\username\Desktop\esp-idf
     
