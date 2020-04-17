@@ -11,11 +11,11 @@ to use OPTIGA™ Trust M hardware secure element based cryptographic functionali
     - [Initialization API's](#initialization)<br>
     - [Cryptographic API's](#Cryptofunctions)<br>
    
-## 1. About this document <a name="introduction"></a>
+## About this document <a name="introduction"></a>
 The aim of this document is to describe the porting details of OPTIGA™ Trust M into mbedTLS software crypto library on any hardware platform (e.g. microcontroller,single board computer etc...) and porting of platform abstraction layer.<br>
 mbedTLS is a crypto library to perform TLS Handshke (secure channel establishment). This library uses an interface, which allows to substitute some of it's functionality by third-party crypto implemementations.For example mbedTLS used in FreeRTOS, where OPTIGA™ Trust M can be used to substitute the standard software crypto implemementation functions of ECDSA, ECDH and RSA.
 
-## 2. OPTIGA™ Trust M integration to mbedTLS<a name="Integration"></a>
+## OPTIGA™ Trust M integration to mbedTLS<a name="Integration"></a>
 
 The functions that are needed to be integrated into mbedTLS are defined below.<br>
 
