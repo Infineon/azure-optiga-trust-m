@@ -29,6 +29,8 @@ menu "OPTIGA(TM) Trust M config"
 		default 0xE0F1 if OPTIGA_TRUST_M_PRIVKEY_SLOT1
 		default 0xE0F2 if OPTIGA_TRUST_M_PRIVKEY_SLOT2
 		default 0xE0F3 if OPTIGA_TRUST_M_PRIVKEY_SLOT3
+		default 0xE0FC if OPTIGA_TRUST_M_RSA_PRIVKEY_SLOT0
+		default 0xE0FD if OPTIGA_TRUST_M_RSA_PRIVKEY_SLOT1
 
 		choice 
 			prompt "Select a private key slot for authentication"
@@ -44,6 +46,10 @@ menu "OPTIGA(TM) Trust M config"
 				bool "3rd private key slot"
 			config OPTIGA_TRUST_M_PRIVKEY_SLOT3
 				bool "4th private key slot"
+			config OPTIGA_TRUST_M_RSA_PRIVKEY_SLOT0
+				bool "1st RSA private key slot"
+			config OPTIGA_TRUST_M_RSA_PRIVKEY_SLOT1
+				bool "2th RSA private key slot"
 		endchoice
 
 		
