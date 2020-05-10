@@ -7,19 +7,23 @@ to use OPTIGA™ Trust M hardware secure element based cryptographic functionali
 # Table of contents
 -  [About this document](#introduction) 
 - [OPTIGA™ Trust M integration to mbedTLS](#Integration)<br>
+    - [Platform Abstraction Layer](#pal)<br>
     - [Initialization API's](#initialization)<br>
     - [Cryptographic API's](#Cryptofunctions)<br>
    
-## 1. About this document <a name="introduction"></a>
-The aim of this document is to describe the porting details of OPTIGA™ Trust M into mbedTLS software crypto library on any hardware platform (e.g. microcontroller,
-single board computer etc...).<br>
+## About this document <a name="introduction"></a>
+The aim of this document is to describe the porting details of OPTIGA™ Trust M into mbedTLS software crypto library on any hardware platform (e.g. microcontroller,single board computer etc...) and porting of platform abstraction layer.<br>
 mbedTLS is a crypto library to perform TLS Handshke (secure channel establishment). This library uses an interface, which allows to substitute some of it's functionality by third-party crypto implemementations.For example mbedTLS used in FreeRTOS, where OPTIGA™ Trust M can be used to substitute the standard software crypto implemementation functions of ECDSA, ECDH and RSA.
 
-## 2. OPTIGA™ Trust M integration to mbedTLS<a name="Integration"></a>
+## OPTIGA™ Trust M integration to mbedTLS<a name="Integration"></a>
 
 The functions that are needed to be integrated into mbedTLS are defined below.<br>
 
-### 2.1 Initialization API's <a name="initialization"></a>
+### Platform Abstraction Layer <a name="pal"></a>
+Platform abstraction layer for platform low level drivers like I2C, Timer, GPIO, socket and other platform dependencies.
+Modify the files based on the target platform. Generic steps are described [here](https://github.com/Infineon/optiga-trust-m/tree/master/pal/NEW_PAL_TEMPLATE).
+
+### Initialization API's <a name="initialization"></a>
 
 These are the API's which initializes the OPTIGA™ Trust M chip. Define these API's in the file “optiga_trust.c” and update corresponding header file. Copy these files under folder [utilities](https://github.com/Infineon/optiga-trust-m/tree/d15dd7a0b4e23f2adac6cbd2cd0f924d0ab03197/examples/utilities)
 
@@ -45,7 +49,7 @@ For more information refer to the [example_optiga_util_read_data.c](https://gith
 
 #
 
-### 2.2 Cryptographic API's <a name="Cryptofunctions"></a>
+### Cryptographic API's <a name="Cryptofunctions"></a>
 
 
 - #### ECDH
@@ -115,12 +119,7 @@ For more information refer to the [example_optiga_util_read_data.c](https://gith
     - [mbedtls_rsa_get_sig_len_key_type](https://github.com/Infineon/optiga-trust-m/blob/d15dd7a0b4e23f2adac6cbd2cd0f924d0ab03197/examples/mbedtls_port/trustm_rsa.c/#L225-L260)<br>
     This function used to get signature length and key type based on modulus length.
     - [mbedtls_rsa_rsassa_pkcs1_v15_verify](https://github.com/Infineon/optiga-trust-m/blob/d15dd7a0b4e23f2adac6cbd2cd0f924d0ab03197/examples/mbedtls_port/trustm_rsa.c/#L2246-L2380)<br>
-    This API verifies the signature using OPTIGA™ security chip using the public key.
-    
-            Note :
-            - If Azure Certificate chain has RSA 4096 certificate, certificate path validation has to be disabled since OPTIGA™ Trust M supports only RSA 1024 and 2048.
-            - If user is using ESP IDF then Disabling of certificate path validation can be done by updating "mbedtls_ssl_conf_authmode(&tls->conf, MBEDTLS_SSL_VERIFY_NONE)" in function "static esp_err_t  set_ca_cert(esp_tls_t *tls, const unsigned char *cacert, size_t cacert_len)" in file esp_tls.c present under “ESP_IDF_PATH\components\esptls”
-    
+    This API verifies the signature using OPTIGA™ security chip using the public key.    
     - [mbedtls_rsa_rsassa_pkcs1_v15_sign](https://github.com/Infineon/optiga-trust-m/blob/d15dd7a0b4e23f2adac6cbd2cd0f924d0ab03197/examples/mbedtls_port/trustm_rsa.c/#L1908-L2016)<br>
     This API generates signature for the given digest using the RSA private key stored in OPTIGA™ security
     chip and the signature generated need to be stored in the mbedTLS signature structure.
