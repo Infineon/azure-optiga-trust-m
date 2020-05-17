@@ -100,7 +100,7 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     ```
     </details>
 - Change working directory to <azure-optiga-trust-m\examples\provision_test_certificate>
-- Configure "Example Configuration" using below command
+- Configure "OPTIGA(TM) Trust M config" using below command to select the Certificate and Key slot
 
     ```sh
     idf.py menuconfig
@@ -136,7 +136,10 @@ Now it becomes possible to provision your device with a new X.509 certificate an
   If you have completed [this](#Create-a-CA-certificate-for-Azure-IoT-Hub) step, you should have either `.\RootCA.pem` in Windows or `./certs/azure-iot-test-only.root.ca.cert.pem` in Bash.
   Now type in the following command using OpenSSL:
   ```bash
+  //For RSA key generation execute below command
   openssl genrsa -out tempCsrSigner.key 2048
+  //For ECC key generation execute below command
+  openssl ecparam -out tempCsrSigner.pem -name prime256v1 -genkey
   openssl req -new -key tempCsrSigner.key -out deviceCert.csr
   ```
   For Bash
@@ -148,6 +151,26 @@ Now it becomes possible to provision your device with a new X.509 certificate an
   openssl x509 -req -in deviceCert.csr -CA .\certs\azure-iot-test-only.root.ca.cert.pem -CAkey .\private\azure-iot-test-only.root.ca.cert.pem -CAcreateserial -out deviceCert.pem -days 500 -sha256 -force_pubkey device_public_key.pem
   ```
 * Writing back the new certificate
+- Open the the certficate file in any text editor and copy the certificate.
+- Edit the main file of the "provision_test_certificate" project from the path <azure-optiga-trust-m\examples\provision_test_certificate\main>.
+- Replace the "CERTIFICATE" macro value "0" with the copied certficate. 
+- Build Personalisation project and Flash ESP32 using below command 
+    ```bash	
+    idf.py build
+    idf.py -p <ESP32 serial port> flash
+        E.g.: idf.py -p com7 flash
+
+    //Custom build folder
+    idf.py -B <CUSTOM_BUILD_FOLDER_PATH> build    
+    idf.py -B <CUSTOM_BUILD_FOLDER_PATH> -p <ESP32 serial port> flash
+    E.g. : idf.py -B c:\esp-build build
+         : idf.py -B c:\esp-build -p com7 flash
+    ```
+- Once sample project is flashed successfully, you can monitor communication between ESP32 using
+    ```sh
+    idf.py monitor
+    ```
+- After the above step, Certficate will be succesfully written to selected certficate slot.
 ### Creating a new Azure IoT Device
 
 - Create an Azure IoT Hub by following steps under section **Create an X.509 device for your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#create-an-x509-device-for-your-iot-hub).

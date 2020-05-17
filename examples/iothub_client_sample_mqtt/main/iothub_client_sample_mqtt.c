@@ -34,7 +34,7 @@
 
 static const char* connectionString = EXAMPLE_IOTHUB_CONNECTION_STRING;
 
-static char device_certificate_pem [1200] = {0};
+static char device_certificate_pem [1300] = {0};
 static uint16_t device_certificate_pem_length = sizeof(device_certificate_pem);
 
 #ifdef LOAD_TA_FROM_OPTIGA
@@ -42,8 +42,40 @@ static uint16_t device_certificate_pem_length = sizeof(device_certificate_pem);
 static char trust_anchor_pem [1300] = {0};
 static uint16_t trust_anchor_pem_length = sizeof(trust_anchor_pem);
 #endif
+const char *privatekey;
 
-const char x509privatekey[] =
+//Dummy private key assigned to allocate buffer
+const char rsaprivatekey[] =
+"-----BEGIN RSA PRIVATE KEY-----\r\n"
+"MIIEowIBAAKCAQEAyBGCGZOQ9lYTRsqtO5wYrqzxoMMI8T3bMjVOTuFR5LYXXpPB\r\n"
+"sDYZFzC/9zfIlBC7eLz9VJbtD+WZO0iY/N49j9tpV30EapRCzc/hLHyvQlXLFVxd\r\n"
+"JJ9C6USjeloUUSLgi96VAP6iFZp7BV8kb21J4Ky4VCse64ilRDvRDsiA4Va2b7Qt\r\n"
+"EPhpdSyGZY8m+Rb3cLGSOD+K1ruYHMiMzwNTaBMLPfLqXXsgfSQGGIPmtY/pdBc9\r\n"
+"pjCtZO3HDX429zE0XIG30dMK+iY/LzsNkXXP9WROfohOZ2bP0rIRDKza/Ys/wi1U\r\n"
+"0CujKjIxvFMqxU51eQ8DrA2iF7uJsbN6L8w/qwIDAQABAoIBADx2fhj4rdCkhsLY\r\n"
+"Ma5YKGVxwrxQ9PzjMsFjtrzD/5ndJgbhJKH6V27YvssZwrZssBt3EiBkVFR/kOWH\r\n"
+"tSSGjZhSOO3FzHXhRKcqceSd8eFcSDm2ZjfRIcmZgsZRPt6eaboblHBug9F/lDo1\r\n"
+"XK+IGdGaoUJencOU0k1ivnV3RuvSXg4HXXMDgxu866sXhdbvCzPVV+ho7FkNoK/w\r\n"
+"tIgoDXQ8oQu2FKnyk35C9FeFnrTRttKJjlJqSGClHdZC2PR6aI9ee+l652JGTSYC\r\n"
+"SwaTVUMiTR0G4RwL2yAtDxRe8+f/p/omNn24EivmtzVMQzAh7NiEofcd2fL/y72P\r\n"
+"gCax92ECgYEA6ESWQ55h9FNUGOX/TEHHYxxugwpHJlTgZfFJ745FveGmzpaSzODb\r\n"
+"4Q5PQc9Ioxy9eX+YzM0xzpBjHZ/mgm1ENG4Yl9m7goWFRwu3Zl0S/PIsC7VAYfWr\r\n"
+"/MfDNI0Y1Uly+wW2AgDwHTdAfjWPh2iDWgseG7sd/pVc6RMJcLYGjukCgYEA3IKu\r\n"
+"S4vbejwIJ+hsTCtKsR2UnyvkOB8vKZ5vVJNGQxVTHoiFXHwWyfTPTe9mj6TqLEZH\r\n"
+"4nZKIzgmsNRXKoElDnz2y9np3pM23AJUQV4G5q3QhMQcY6FO/FoPUEqO0pwwQiC2\r\n"
+"fpNheTsVBmC+nech2YEaaoQ8bXHAOvUD+brjhXMCgYAP9ma9Tu08dV2aOHRLMVoa\r\n"
+"naGar+Ij6EFjwClspUJ1wkRMflyoZ+u0k98ujqhXTWpYJ0TBDnkV0SZ+qraU0B2X\r\n"
+"3Nkj1nrkhXibYVrBVjQv3hTY2SQLl26yeKgZvHiwb9PPHJ1dleLqnxl3kwbCL5SX\r\n"
+"Y5w2G638CRfRjNVhQaFBwQKBgHmyYZDuAdXnFbU4r7Ql3FX9dk2WQqC6jSPR/a1W\r\n"
+"jltthG8Ad2GAVm9k/ZgMfLTgFiETNI8GK4pebfP/bI/XsGTbkLUWcdzVsFwhqPBe\r\n"
+"fT6IROFQ/j36A4aACZ2NWF9htbx5I16d5hirA8J+WBT7P5IzjymkC1l3gtjG6kfD\r\n"
+"3deDAoGBAI2jH3NenBVfYIcqfgMbaIu4UxUNLVbXSt+PtAnWvWDIIcx7LdBLabMl\r\n"
+"SagxUVGkTmUaylaR9udAVYon0YdW57TRBZqWQAgSyo7RmQpQYzFKKX/4iUxr7igj\r\n"
+"mzvHG03BPJWSUzByovFY6dbn/QbYvd5w763vG02vu5kp09rOdZZB\r\n"
+"-----END RSA PRIVATE KEY-----\r\n";
+
+//Dummy private key assigned to allocate buffer
+const char eccprivatekey[] =
 "-----BEGIN EC PRIVATE KEY-----\r\n"
 "MHcCAQEEIDkoXdx0gErvQDm8TyDoqWJibRSo0GWNCjWR6oMjKUhRoAoGCCqGSM49\r\n"
 "AwEHoUQDQgAEU7b1qd5vN0sCxEn8On2uoFEkD9c9APP1rOT/JPinjkASxzpbpxgp\r\n"
@@ -196,9 +228,18 @@ void iothub_client_sample_mqtt_run(void)
 			
             // Set the X509 certificates in the SDK
 			read_certificate_from_optiga(device_certificate_pem, &device_certificate_pem_length);
+			if((CONFIG_OPTIGA_TRUST_M_PRIVKEY_SLOT == 0xE0FC) || (CONFIG_OPTIGA_TRUST_M_PRIVKEY_SLOT == 0xE0FD))
+			{
+				privatekey = rsaprivatekey;
+			}
+			else
+			{
+				privatekey = eccprivatekey;
+			}
+				
 			if (
                 (IoTHubDeviceClient_LL_SetOption(iotHubClientHandle, OPTION_X509_CERT, device_certificate_pem) != IOTHUB_CLIENT_OK) ||
-                (IoTHubDeviceClient_LL_SetOption(iotHubClientHandle, OPTION_X509_PRIVATE_KEY, x509privatekey) != IOTHUB_CLIENT_OK)
+                (IoTHubDeviceClient_LL_SetOption(iotHubClientHandle, OPTION_X509_PRIVATE_KEY, privatekey) != IOTHUB_CLIENT_OK)
                 )
             {
                 printf("failure to set options for x509, aborting\r\n");

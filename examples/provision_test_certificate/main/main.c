@@ -39,23 +39,21 @@ extern void write_data_object (uint16_t oid, const uint8_t * p_data, uint16_t le
 #define ECHO_TEST_CTS  (UART_PIN_NO_CHANGE)
 
 #define BUF_SIZE (1024)
-
+/*
 #define CERTIFICATE 	"-----BEGIN CERTIFICATE-----\r\n"\
-						"MIIB/DCCAaKgAwIBAgIJALMKa9w3lJTkMAoGCCqGSM49BAMCMFkxCzAJBgNVBAYT\r\n"\
-						"AklOMQwwCgYDVQQIDANLQVIxDTALBgNVBAcMBEJBTkcxDTALBgNVBAoMBElGSU4x\r\n"\
-						"DDAKBgNVBAsMA0RTUzEQMA4GA1UEAwwHQXp1cmVDQTAeFw0yMDAyMTcwOTM4Mzha\r\n"\
-						"Fw0yMTAyMTYwOTM4MzhaMFkxCzAJBgNVBAYTAklOMQwwCgYDVQQIDANLQVIxDTAL\r\n"\
-						"BgNVBAcMBEJBTkcxDTALBgNVBAoMBElGSU4xDDAKBgNVBAsMA0RTUzEQMA4GA1UE\r\n"\
-						"AwwHQXp1cmVDQTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABLqrHZbGfOUKlfW8\r\n"\
-						"sHENpzBLf6uMeYKDp/0sPrqwY9Lk0ehMBQkB3uHSIWHP3H0TlqLqZvSgDQV5ncG7\r\n"\
-						"Myr1/wajUzBRMB0GA1UdDgQWBBR8+Il4IuRy8lWzwyPuWHnodVplFDAfBgNVHSME\r\n"\
-						"GDAWgBR8+Il4IuRy8lWzwyPuWHnodVplFDAPBgNVHRMBAf8EBTADAQH/MAoGCCqG\r\n"\
-						"SM49BAMCA0gAMEUCIEQ1JV1+Vhpu4XI7zYDMBKLSaphex/+sXB/h9KlNk1yRAiEA\r\n"\
-						"gO9MFPaLum7e7HXvFgrx38mwiwWSMPMCf+AW5nJaHzU=\r\n"\
-						"-----END CERTIFICATE-----\r\n"	
-
-						
-//#define CERTIFICATE	(0)
+						"MIIBvDCCAWICCQDaGxvqfS8XRDAKBggqhkjOPQQDAjBZMQswCQYDVQQGEwJJTjEM\r\n"\
+						"MAoGA1UECAwDS0FSMQ0wCwYDVQQHDARCQU5HMQ0wCwYDVQQKDARJRklOMQwwCgYD\r\n"\
+						"VQQLDANEU1MxEDAOBgNVBAMMB0F6dXJlQ0EwHhcNMjAwNTE2MTMwMTA2WhcNMjEw\r\n"\
+						"OTI4MTMwMTA2WjBWMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExCzAJBgNVBAcM\r\n"\
+						"AkJBMQwwCgYDVQQKDANJTkYxDDAKBgNVBAsMA0RTUzERMA8GA1UEAwwIZGV2aWNl\r\n"\
+						"Y2EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAATnNSdwBzRhNZUDDsfUV88xCwkHJRhI\r\n"\
+						"YkbOmQnK8ESH8aDENwXxkdU20lRqDE0KONGRNRMqzeIcF4f22s4SraanOoBwIlDL\r\n"\
+						"8BF4uLvOP9f9wlxuKzPZCaPsWcJSkW3pV8MwCgYIKoZIzj0EAwIDSAAwRQIgE/kb\r\n"\
+						"/JCkPg3GF4Tk5wVOzP3U2rGDs8Lk+iO5+QVUME8CIQC1U3LdquMn7bC8NL4nnXm+\r\n"\
+						"KRYxyjUFcM8QqSDH4Tsr/A==\r\n"\
+						"-----END CERTIFICATE-----\r\n"\
+*/						
+#define CERTIFICATE	(0)
 
 const unsigned char certificate [] = {CERTIFICATE};
 
@@ -125,21 +123,29 @@ int convert_pem_to_der( const unsigned char *input, size_t ilen,
 /**
  * Generate ECC key pair
  */
-int generatepublickey(optiga_ecc_curve_t curvetype)
+int generatepublickey(uint8_t curvetype)
 {
 	int ret = -1;
 	optiga_key_id_t optiga_key_id = CONFIG_OPTIGA_TRUST_M_PRIVKEY_SLOT;
 	optiga_crypt_t * me = NULL;
     optiga_lib_status_t command_queue_status = OPTIGA_CRYPT_ERROR;
     uint16_t i;
-	uint8_t publickeygenerated[200];
+	uint8_t publickeygenerated[300];
 	uint16_t len_of_publickey = sizeof(publickeygenerated);
-	uint8_t temp_publickey[200];
+	uint8_t temp_publickey[400];
 	size_t temp_len_of_publickey;
 	uint16_t offset_to_write = 0, offset_to_read = 0;
 	uint16_t size_to_copy = 0;
-	char public_key[200];
+	char public_key[500];
 	uint16_t public_key_len;
+	uint8_t data_offset = 0;
+	uint8_t ecc_curve_type = true;
+	uint8_t *header_pointer = NULL;
+	uint8_t rsa1024_header[] = {0x30, 0x81, 0x9F, 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00};
+	uint8_t rsa2048_header[] = {0x30, 0x82, 0x01, 0x22, 0x30, 0x0D, 0x06, 0x09, 0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x01, 0x01, 0x05, 0x00};
+	uint8_t ecc256_header[] = {0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 
+						0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x03, 0x01, 0x07,};
+	uint8_t ecc384_header[] = {0x30, 0x76, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x22,};
 
 	do
 	{
@@ -151,12 +157,45 @@ int generatepublickey(optiga_ecc_curve_t curvetype)
 		}
 
 		crypt_event_completed_status = OPTIGA_LIB_BUSY;
-
-		//invoke optiga command to generate a key pair.
-		command_queue_status = optiga_crypt_ecc_generate_keypair(me, curvetype,
-				(optiga_key_usage_t) (OPTIGA_KEY_USAGE_KEY_AGREEMENT
-						| OPTIGA_KEY_USAGE_AUTHENTICATION),
-				FALSE, &optiga_key_id, publickeygenerated, &len_of_publickey);
+		
+		printf("Generating keypair in Oid %04X\n", CONFIG_OPTIGA_TRUST_M_PRIVKEY_SLOT);
+		
+		if((curvetype != OPTIGA_RSA_KEY_1024_BIT_EXPONENTIAL) && (curvetype != OPTIGA_RSA_KEY_2048_BIT_EXPONENTIAL))
+		{
+			data_offset = sizeof(ecc256_header);
+			header_pointer = ecc256_header;
+			if(curvetype == (uint8_t)OPTIGA_ECC_CURVE_NIST_P_384)
+			{
+				data_offset = sizeof(ecc384_header);
+				header_pointer = ecc384_header;
+			}			
+			memcpy(publickeygenerated, header_pointer, data_offset);
+			
+			//invoke optiga command to generate a key pair.
+			command_queue_status = optiga_crypt_ecc_generate_keypair(me, (optiga_ecc_curve_t)curvetype,
+					(optiga_key_usage_t) (OPTIGA_KEY_USAGE_SIGN
+							| OPTIGA_KEY_USAGE_AUTHENTICATION),
+					FALSE, &optiga_key_id, &publickeygenerated[data_offset], &len_of_publickey);
+		}
+		else
+		{
+			data_offset = sizeof(rsa1024_header);
+			header_pointer = rsa1024_header;
+			if (curvetype == (uint8_t)OPTIGA_RSA_KEY_2048_BIT_EXPONENTIAL)
+			{
+				data_offset = sizeof(rsa2048_header);
+				header_pointer = rsa2048_header;
+			}
+			memcpy(publickeygenerated, header_pointer, data_offset);
+			
+			command_queue_status = optiga_crypt_rsa_generate_keypair(me,
+                                                          (optiga_rsa_key_type_t)curvetype,
+                                                          (optiga_key_usage_t) (OPTIGA_KEY_USAGE_SIGN | OPTIGA_KEY_USAGE_AUTHENTICATION),
+                                                          FALSE,
+                                                          &optiga_key_id,
+                                                          &publickeygenerated[data_offset],
+                                                          &len_of_publickey);
+		}
 
 		if ( command_queue_status != OPTIGA_LIB_SUCCESS )
 		{
@@ -165,24 +204,33 @@ int generatepublickey(optiga_ecc_curve_t curvetype)
 			break;
 		}
 
-		i=0;
 		while (OPTIGA_LIB_BUSY == crypt_event_completed_status)
 		{
 			//Wait until the optiga_crypt_ecc_generate_keypair operation is completed
-			i++;
-			pal_os_timer_delay_in_milliseconds(30);
-			if (i == 50)
-				break;
+			pal_os_timer_delay_in_milliseconds(10);
 		}
 
 		if ( crypt_event_completed_status != OPTIGA_LIB_SUCCESS )
 		{
 			//optiga_util_open_application failed
-			OPTIGA_CRYPT_LOG_MESSAGE ("optiga_util_open_application failed");
+			OPTIGA_CRYPT_LOG_MESSAGE ("Call back status error");
+			printf("%02X", crypt_event_completed_status);
 			break;
 		}
-
-		for(int k=0; k< len_of_publickey; k++)
+		
+		if(curvetype == OPTIGA_RSA_KEY_1024_BIT_EXPONENTIAL)
+		{
+			publickeygenerated[2] = len_of_publickey + 15;
+		}
+		else if(curvetype == OPTIGA_RSA_KEY_2048_BIT_EXPONENTIAL)
+		{
+			publickeygenerated[2] = (len_of_publickey + 15) >> 8;
+			publickeygenerated[3] = (uint8_t)(len_of_publickey + 15);
+		}
+		
+		len_of_publickey += data_offset;
+		
+		for(int k = 0; k < len_of_publickey; k++)
 		{			
 			if((k%16) == 0)
 			{
@@ -191,14 +239,13 @@ int generatepublickey(optiga_ecc_curve_t curvetype)
 			printf(" %02X", publickeygenerated[k]);
 		}
 
-		//convert to PEM format
-        mbedtls_base64_encode((unsigned char *)temp_publickey, sizeof(temp_publickey),
+		mbedtls_base64_encode((unsigned char *)temp_publickey, sizeof(temp_publickey),
                               &temp_len_of_publickey, publickeygenerated, len_of_publickey);
-
-        memcpy(public_key, "-----BEGIN PUBLIC KEY-----\n", 28);
-        offset_to_write += 28;
-        
-       
+		
+		memcpy(public_key, "-----BEGIN PUBLIC KEY-----\n", 28);
+		offset_to_write += 28;			
+		
+							  
         //Properly copy key and format it as pkcs expects
         for (offset_to_read = 0; offset_to_read < temp_len_of_publickey;)
         {
@@ -213,10 +260,10 @@ int generatepublickey(optiga_ecc_curve_t curvetype)
             public_key[offset_to_write] = '\n';
             offset_to_write++;
         }
-
-        memcpy(public_key + offset_to_write, "-----END PUBLIC KEY-----\n\0", 26);
-
-        public_key_len = offset_to_write + 26;
+		
+		memcpy(public_key + offset_to_write, "-----END PUBLIC KEY-----\n\0", 26);
+		public_key_len = offset_to_write + 26;
+		        
 		
 		//To print pem format public key
 		printf("\nPEM format public key\n\n");
@@ -263,7 +310,7 @@ int write_certificate(void)
     }
 	
 	printf("\n");
-	
+	printf("Writing to Oid : %04X\n", CONFIG_OPTIGA_TRUST_M_CERT_SLOT);
 	write_data_object (CONFIG_OPTIGA_TRUST_M_CERT_SLOT, certificate_buf, len_of_cert);
 	
 	return 0;
@@ -273,7 +320,7 @@ int write_certificate(void)
 static void optiga_personalization(void)
 {	
     int ret = -1;
-	optiga_ecc_curve_t curvetype;
+	uint8_t curvetype;
 	
     /* Configure parameters of an UART driver,
      * communication pins and install the driver */
@@ -308,25 +355,25 @@ static void optiga_personalization(void)
 			{
 				if('1' == (char)data[0])
 				{				
-					curvetype = OPTIGA_ECC_CURVE_NIST_P_256;
+					curvetype = (uint8_t)OPTIGA_ECC_CURVE_NIST_P_256;
 					printf("\nSelected NIST P-256 Curve\n");
 					break;
 				}
 				else if('2' == (char)data[0])
 				{
-					curvetype = OPTIGA_ECC_CURVE_NIST_P_384;
+					curvetype = (uint8_t)OPTIGA_ECC_CURVE_NIST_P_384;
 					printf("\nSelected NIST P-384 Curve\n");
 					break;
 				}
 				else if('3' == (char)data[0])
 				{
-					curvetype = OPTIGA_RSA_KEY_1024_BIT_EXPONENTIAL;
+					curvetype = (uint8_t)OPTIGA_RSA_KEY_1024_BIT_EXPONENTIAL;
 					printf("\nSelected RSA 1024\n");
 					break;
 				}
 				else if('4' == (char)data[0])
 				{
-					curvetype = OPTIGA_RSA_KEY_2048_BIT_EXPONENTIAL;
+					curvetype = (uint8_t)OPTIGA_RSA_KEY_2048_BIT_EXPONENTIAL;
 					printf("\nSelected RSA 2048\n");
 					break;
 				}
@@ -344,7 +391,7 @@ static void optiga_personalization(void)
 		ret = generatepublickey(curvetype);
 		if(0 != ret)
 		{
-			printf("\nGenerate Key Pair generation failed\n");
+			printf("\nKey Pair generation failed\n");
 		}
 	}
 	else
