@@ -31,7 +31,7 @@ config RSA_KEY_SIZE
 		default 0x42 if RSA_2048
 		
 	choice 
-	prompt "Select a RSA key used of device certficate"
+	prompt "Select a RSA key used for device certficate"
 	default RSA_1024
 		help
 			By default should correspond to RSA 1024 key size

@@ -149,7 +149,7 @@ Now it becomes possible to provision your device with a new X.509 certificate an
 
   openssl req -new -key tempCsrSigner.key -out deviceCert.csr
   ```
-  During execution of second command, You will be prompted to give Distinguished Names(DN). Common Name (CN) is mandatory field in DN details. Provide the newly created Azure IoT Device  **DEVICE ID** as common name for csr generation, other fields can be skipped
+  During execution of second command, You will be prompted to give Distinguished Names(DN). Common Name (CN) is mandatory field in DN details. Provide the newly created Azure IoT Device  **DEVICE ID** as common name for csr generation, other fields can be skipped</br>
   For Bash
   ```bash
   openssl x509 -req -in deviceCert.csr -CA ./certs/azure-iot-test-only.root.ca.cert.pem -CAkey ./private/azure-iot-test-only.root.ca.cert.pem -CAcreateserial -out deviceCert.pem -days 500 -sha256 -force_pubkey device_public_key.pem 
