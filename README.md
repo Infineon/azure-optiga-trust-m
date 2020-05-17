@@ -66,6 +66,11 @@ For this please follow first **three** steps from the [guidance](https://github.
 
 Now it becomes possible to provision your device with a new X.509 certificate and create a new Azure IoT Device.
 
+### Creating a new Azure IoT Device
+
+- Create an Azure IoT Hub by following steps under section **Create an X.509 device for your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#create-an-x509-device-for-your-iot-hub).
+- Note down newly created IoT Device **Device ID** 
+
 ### Creating a test X.509 device certificate
 
 - Go to windows start menu and Open ESP-IDF command prompt
@@ -138,10 +143,13 @@ Now it becomes possible to provision your device with a new X.509 certificate an
   ```bash
   //For RSA key generation execute below command
   openssl genrsa -out tempCsrSigner.key 2048
+  or
   //For ECC key generation execute below command
   openssl ecparam -out tempCsrSigner.pem -name prime256v1 -genkey
+
   openssl req -new -key tempCsrSigner.key -out deviceCert.csr
   ```
+  During execution of second command, You will be prompted to give Distinguished Names(DN). Common Name (CN) is mandatory field in DN details. Provide the newly created Azure IoT Device  **DEVICE ID** as common name for csr generation, other fields can be skipped
   For Bash
   ```bash
   openssl x509 -req -in deviceCert.csr -CA ./certs/azure-iot-test-only.root.ca.cert.pem -CAkey ./private/azure-iot-test-only.root.ca.cert.pem -CAcreateserial -out deviceCert.pem -days 500 -sha256 -force_pubkey device_public_key.pem 
@@ -171,11 +179,6 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     idf.py monitor
     ```
 - After the above step, Certficate will be succesfully written to selected certficate slot.
-### Creating a new Azure IoT Device
-
-- Create an Azure IoT Hub by following steps under section **Create an X.509 device for your IoT hub** from the documentation [here](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-security-x509-get-started#create-an-x509-device-for-your-iot-hub).
-- Note down newly created IoT Device **Device ID** 
-
 
 ## Step 3. Configuring and Building Sample
 
@@ -299,7 +302,8 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     ```
     ![](docs/images/menu_config_1.png)
 
-- Select Example Configuration and update WiFi SSID, WiFi Password and IoT Hub device connection string
+- Select Example Configuration and update WiFi SSID, WiFi Password, IoT Hub device connection string and RSA key type(only if used for personalization)
+    >In case RSA key is used for personalization, then select the RSA key type used for Personalization from the Example Configuration
 
 - To get IoT Hub Device Connection String: 
     - navigate to your IoT Hub, and then select Setting > shared Access policies > iothubowner

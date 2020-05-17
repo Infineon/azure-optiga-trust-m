@@ -25,6 +25,23 @@ config IOTHUB_CONNECTION_STRING
 
 		You can get this from the iothub-explorer CLI or the Azure Portal
 
+config RSA_KEY_SIZE
+    hex
+		default 0x41 if RSA_1024
+		default 0x42 if RSA_2048
+		
+	choice 
+	prompt "Select a RSA key used of device certficate"
+	default RSA_1024
+		help
+			By default should correspond to RSA 1024 key size
+
+		config RSA_1024
+			bool "RSA key 1024"
+		config RSA_2048
+			bool "RSA key 2048"
+	endchoice
+
 config MESSAGE_INTERVAL_TIME
     int "Time delay in Milliseconds between two consecutive messages"
     default 100

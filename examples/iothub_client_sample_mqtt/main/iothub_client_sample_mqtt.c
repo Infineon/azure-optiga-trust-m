@@ -45,7 +45,25 @@ static uint16_t trust_anchor_pem_length = sizeof(trust_anchor_pem);
 const char *privatekey;
 
 //Dummy private key assigned to allocate buffer
-const char rsaprivatekey[] =
+const char rsa1024privatekey[] =
+"-----BEGIN RSA PRIVATE KEY-----\r\n"
+"MIICXAIBAAKBgQDGwjZ8SoYeg9fGuDxewtytepXCwIEwU+b6GhYaEN18BkLaB5c9\r\n"
+"PgldSXMf+H2T3WrM//Gqbe+3n9Ucl/NW0Xp++kBr6X3lqC/6uBQgPsXAbBitx0LM\r\n"
+"EjhVsqJtGXMTtaIdaXbQAI5z8JQ9Mlh0wO8AE5ehfspTYlMT8PYcmtDkPQIDAQAB\r\n"
+"AoGACH0c9Jv+NGlvGsadlXJ/GE2m/cVY/yZmNAJPNVfJDdX6nvM6C1yN69UKPLBR\r\n"
+"NLJ9MDoyKRQ+67nA0VLQCsIxmA1yEwLVhpqMnmttttA1a90mhcOJ56IOZdz83u7Y\r\n"
+"ltbW+wfTt8PFxLpCpeBf8T2YjOU/m3qnU6+nw37u1u76wgECQQDqIdKr1FmSurkE\r\n"
+"C2Vyro6Kh3nmGZxGn/p/nFpZ26zYn4+abLDCEWpjv0dhiepvDqZWKUlhjaUi3Gs6\r\n"
+"/h+YQKCBAkEA2VKZKGTpRqTRwBhBhtU+oiYzaqhNV0DtOkYDCv/JsZUWMe6hKmje\r\n"
+"vl6YzCiqMMlZTRIVsIHiv48/juJTAAflvQJAZF3Hb72CAHJm6aLxBC5sEFpvGQKV\r\n"
+"iXj+60FdQfP3ro0IBEzfoPHSR5wxv1Bd3OnMyFa+jEEqLz2KAin55UyfAQJATTlE\r\n"
+"o034dtnqjtAPuNHdx9C7RJM5qF+x7JskSaxLB4dqs6OQMXnCbPNAaIuqrlteGDzs\r\n"
+"6CO/Z0KH20YhKEmmIQJBAMRq1ErWYJ5MIYdbjOcBAFW6YxuHYdOpC+wAUjdp8EUk\r\n"
+"uPkDQqwOHupUQcSc9yE1awcQOckamHFjUolF95RQz/c=\r\n"
+"-----END RSA PRIVATE KEY-----\r\n";
+
+//Dummy private key assigned to allocate buffer
+const char rsa2048privatekey[] =
 "-----BEGIN RSA PRIVATE KEY-----\r\n"
 "MIIEowIBAAKCAQEAyBGCGZOQ9lYTRsqtO5wYrqzxoMMI8T3bMjVOTuFR5LYXXpPB\r\n"
 "sDYZFzC/9zfIlBC7eLz9VJbtD+WZO0iY/N49j9tpV30EapRCzc/hLHyvQlXLFVxd\r\n"
@@ -230,7 +248,14 @@ void iothub_client_sample_mqtt_run(void)
 			read_certificate_from_optiga(device_certificate_pem, &device_certificate_pem_length);
 			if((CONFIG_OPTIGA_TRUST_M_PRIVKEY_SLOT == 0xE0FC) || (CONFIG_OPTIGA_TRUST_M_PRIVKEY_SLOT == 0xE0FD))
 			{
-				privatekey = rsaprivatekey;
+				if(0x41 == CONFIG_RSA_KEY_SIZE)
+				{
+					privatekey = rsa1024privatekey;
+				}
+				else
+				{
+					privatekey = rsa2048privatekey;
+				}
 			}
 			else
 			{
