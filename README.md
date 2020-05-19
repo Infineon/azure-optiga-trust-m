@@ -110,6 +110,15 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     ```sh
     idf.py menuconfig
     ```
+- Update the below parameters:
+
+    ![](docs/images/menu_config_3.png)
+    
+    - Select the certificate Slot out of 4 slots provided, where the device certificate is personalized
+    - Select the Private Key slot out of 4 slots provided, where the device private key is personalized
+
+    ![](docs/images/menu_config_4.png)
+
 - Build Personalisation project and Flash ESP32 using below command 
     ```bash	
     idf.py build
