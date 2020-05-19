@@ -126,6 +126,13 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     ```sh
     idf.py monitor
     ```
+- Choose the type of private key pair to be personalized by selecting from the given option shown below
+  ```bash
+  Press 1 to Generate NIST P-256
+  Press 2 to Generate NIST P-384
+  Press 3 to Generate RSA 1024
+  Press 4 to Generate RSA 2048
+  ```
 
 * Public Key Extraction</br>
   The demo project starts with generating a new keypair, where the private part stays on the secure element, and the public component   is printed out. You should be able to see something like this
