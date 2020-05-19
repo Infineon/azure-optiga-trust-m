@@ -1,4 +1,4 @@
-# Microsoft Azure IoT with </br> Infineon OPTIGA&trade; Trust M 
+# Microsoft Azure IoT with Infineon OPTIGA&trade; Trust M 
 
 * [Introduction](#introduction)
 * [Hardware](#Hardware)
