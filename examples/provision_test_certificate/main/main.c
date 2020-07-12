@@ -39,21 +39,21 @@ extern void write_data_object (uint16_t oid, const uint8_t * p_data, uint16_t le
 #define ECHO_TEST_CTS  (UART_PIN_NO_CHANGE)
 
 #define BUF_SIZE (1024)
-/*
+
 #define CERTIFICATE 	"-----BEGIN CERTIFICATE-----\r\n"\
-						"MIIBvDCCAWICCQDaGxvqfS8XRDAKBggqhkjOPQQDAjBZMQswCQYDVQQGEwJJTjEM\r\n"\
+						"MIIBoTCCAUcCCQDaGxvqfS8XVjAKBggqhkjOPQQDAjBZMQswCQYDVQQGEwJJTjEM\r\n"\
 						"MAoGA1UECAwDS0FSMQ0wCwYDVQQHDARCQU5HMQ0wCwYDVQQKDARJRklOMQwwCgYD\r\n"\
-						"VQQLDANEU1MxEDAOBgNVBAMMB0F6dXJlQ0EwHhcNMjAwNTE2MTMwMTA2WhcNMjEw\r\n"\
-						"OTI4MTMwMTA2WjBWMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExCzAJBgNVBAcM\r\n"\
-						"AkJBMQwwCgYDVQQKDANJTkYxDDAKBgNVBAsMA0RTUzERMA8GA1UEAwwIZGV2aWNl\r\n"\
-						"Y2EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAATnNSdwBzRhNZUDDsfUV88xCwkHJRhI\r\n"\
-						"YkbOmQnK8ESH8aDENwXxkdU20lRqDE0KONGRNRMqzeIcF4f22s4SraanOoBwIlDL\r\n"\
-						"8BF4uLvOP9f9wlxuKzPZCaPsWcJSkW3pV8MwCgYIKoZIzj0EAwIDSAAwRQIgE/kb\r\n"\
-						"/JCkPg3GF4Tk5wVOzP3U2rGDs8Lk+iO5+QVUME8CIQC1U3LdquMn7bC8NL4nnXm+\r\n"\
-						"KRYxyjUFcM8QqSDH4Tsr/A==\r\n"\
+						"VQQLDANEU1MxEDAOBgNVBAMMB0F6dXJlQ0EwHhcNMjAwNzEyMTEwNjQxWhcNMjEx\r\n"\
+						"MTI0MTEwNjQxWjBYMQswCQYDVQQGEwJBVTETMBEGA1UECAwKU29tZS1TdGF0ZTEh\r\n"\
+						"MB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMREwDwYDVQQDDAhkZXZp\r\n"\
+						"Y2VjYTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABBKNF22hptBhKbscevCjP6FT\r\n"\
+						"c35ORTKFgqzpi/Yfs5S/n/ULM6GsicopigyIin8C3lZ7xVuJmVjcL7xei+py4bww\r\n"\
+						"CgYIKoZIzj0EAwIDSAAwRQIhANV3b1KcwVHxkYUGjeekmW5K7rOD4D+FePS2pRLL\r\n"\
+						"InC4AiBO3UNXA731IU9znQmXJszHlCcKhLwDA1GZ0U0e0MOmqw==\r\n"\
 						"-----END CERTIFICATE-----\r\n"\
-*/						
-#define CERTIFICATE	(0)
+                       
+						
+//#define CERTIFICATE	(0)
 
 const unsigned char certificate [] = {CERTIFICATE};
 
@@ -272,7 +272,7 @@ int generatepublickey(uint8_t curvetype)
             printf("%c", public_key[i]);
         } 
 		printf("\n");
-		OPTIGA_CRYPT_LOG_MESSAGE ("Generate Key Pair successful!!!")
+		OPTIGA_CRYPT_LOG_MESSAGE ("Generate Key Pair successful!!!");
 		
 		ret = 0;
 	}while(0);
