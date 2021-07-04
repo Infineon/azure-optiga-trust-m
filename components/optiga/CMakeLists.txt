@@ -18,6 +18,7 @@ set(COMPONENT_SRCS
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/pal/esp32_freertos/pal_os_event.c"
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/pal/esp32_freertos/pal_os_lock.c"
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/pal/esp32_freertos/pal_os_timer.c"
+	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/pal/esp32_freertos/pal_os_memory.c"
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/pal/pal_crypt_mbedtls.c"
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/optiga/cmd/optiga_cmd.c"
 	"${CMAKE_CURRENT_LIST_DIR}/optiga-trust-m/optiga/common/optiga_lib_common.c"

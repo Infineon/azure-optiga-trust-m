@@ -39,21 +39,21 @@ extern void write_data_object (uint16_t oid, const uint8_t * p_data, uint16_t le
 #define ECHO_TEST_CTS  (UART_PIN_NO_CHANGE)
 
 #define BUF_SIZE (1024)
-
+/*
 #define CERTIFICATE 	"-----BEGIN CERTIFICATE-----\r\n"\
-						"MIIBoTCCAUcCCQDaGxvqfS8XVjAKBggqhkjOPQQDAjBZMQswCQYDVQQGEwJJTjEM\r\n"\
+						"MIIBvDCCAWICCQDaGxvqfS8XRDAKBggqhkjOPQQDAjBZMQswCQYDVQQGEwJJTjEM\r\n"\
 						"MAoGA1UECAwDS0FSMQ0wCwYDVQQHDARCQU5HMQ0wCwYDVQQKDARJRklOMQwwCgYD\r\n"\
-						"VQQLDANEU1MxEDAOBgNVBAMMB0F6dXJlQ0EwHhcNMjAwNzEyMTEwNjQxWhcNMjEx\r\n"\
-						"MTI0MTEwNjQxWjBYMQswCQYDVQQGEwJBVTETMBEGA1UECAwKU29tZS1TdGF0ZTEh\r\n"\
-						"MB8GA1UECgwYSW50ZXJuZXQgV2lkZ2l0cyBQdHkgTHRkMREwDwYDVQQDDAhkZXZp\r\n"\
-						"Y2VjYTBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABBKNF22hptBhKbscevCjP6FT\r\n"\
-						"c35ORTKFgqzpi/Yfs5S/n/ULM6GsicopigyIin8C3lZ7xVuJmVjcL7xei+py4bww\r\n"\
-						"CgYIKoZIzj0EAwIDSAAwRQIhANV3b1KcwVHxkYUGjeekmW5K7rOD4D+FePS2pRLL\r\n"\
-						"InC4AiBO3UNXA731IU9znQmXJszHlCcKhLwDA1GZ0U0e0MOmqw==\r\n"\
+						"VQQLDANEU1MxEDAOBgNVBAMMB0F6dXJlQ0EwHhcNMjAwNTE2MTMwMTA2WhcNMjEw\r\n"\
+						"OTI4MTMwMTA2WjBWMQswCQYDVQQGEwJJTjELMAkGA1UECAwCS0ExCzAJBgNVBAcM\r\n"\
+						"AkJBMQwwCgYDVQQKDANJTkYxDDAKBgNVBAsMA0RTUzERMA8GA1UEAwwIZGV2aWNl\r\n"\
+						"Y2EwdjAQBgcqhkjOPQIBBgUrgQQAIgNiAATnNSdwBzRhNZUDDsfUV88xCwkHJRhI\r\n"\
+						"YkbOmQnK8ESH8aDENwXxkdU20lRqDE0KONGRNRMqzeIcF4f22s4SraanOoBwIlDL\r\n"\
+						"8BF4uLvOP9f9wlxuKzPZCaPsWcJSkW3pV8MwCgYIKoZIzj0EAwIDSAAwRQIgE/kb\r\n"\
+						"/JCkPg3GF4Tk5wVOzP3U2rGDs8Lk+iO5+QVUME8CIQC1U3LdquMn7bC8NL4nnXm+\r\n"\
+						"KRYxyjUFcM8QqSDH4Tsr/A==\r\n"\
 						"-----END CERTIFICATE-----\r\n"\
-                       
-						
-//#define CERTIFICATE	(0)
+*/						
+#define CERTIFICATE	(0)
 
 const unsigned char certificate [] = {CERTIFICATE};
 
@@ -146,13 +146,20 @@ int generatepublickey(uint8_t curvetype)
 	uint8_t ecc256_header[] = {0x30, 0x59, 0x30, 0x13, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 
 						0x08, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x03, 0x01, 0x07,};
 	uint8_t ecc384_header[] = {0x30, 0x76, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x22,};
+	uint8_t ecc521_header[] = {0x30, 0x81, 0x9B, 0x30, 0x10, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x05, 0x2B, 0x81, 0x04, 0x00, 0x23,};
+	uint8_t eccbp256_header[] = {0x30, 0x5A, 0x30, 0x14, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x09, 0x2B, 
+											0x24, 0x03, 0x03, 0x02, 0x08, 0x01, 0x01, 0x07, };
+	uint8_t eccbp384_header[] = {0x30, 0x7A, 0x30, 0x14, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x09, 0x2B, 
+												0x24, 0x03, 0x03, 0x02, 0x08, 0x01, 0x01, 0x0B,};
+	uint8_t eccbp512_header[] = {0x30, 0x81, 0x9B, 0x30, 0x14, 0x06, 0x07, 0x2A, 0x86, 0x48, 0xCE, 0x3D, 0x02, 0x01, 0x06, 0x09, 
+												0x2B, 0x24, 0x03, 0x03, 0x02, 0x08, 0x01, 0x01, 0x0D,};
 
 	do
 	{
 		me = optiga_crypt_create(0, optiga_crypt_event_completed, NULL);
 		if (NULL == me)
 		{
-			OPTIGA_CRYPT_LOG_MESSAGE ("optiga_crypt_create failed !!!");
+			optiga_lib_print_message("optiga_crypt_create failed !!!",OPTIGA_CRYPT_SERVICE,OPTIGA_CRYPT_SERVICE_COLOR);
             break;
 		}
 
@@ -168,6 +175,26 @@ int generatepublickey(uint8_t curvetype)
 			{
 				data_offset = sizeof(ecc384_header);
 				header_pointer = ecc384_header;
+			}
+			if(curvetype == (uint8_t)OPTIGA_ECC_CURVE_NIST_P_521)
+			{
+				data_offset = sizeof(ecc521_header);
+				header_pointer = ecc521_header;
+			}
+			if(curvetype == (uint8_t)OPTIGA_ECC_CURVE_BRAIN_POOL_P_256R1)
+			{
+				data_offset = sizeof(eccbp256_header);
+				header_pointer = eccbp256_header;
+			}
+			if(curvetype == (uint8_t)OPTIGA_ECC_CURVE_BRAIN_POOL_P_384R1)
+			{
+				data_offset = sizeof(eccbp384_header);
+				header_pointer = eccbp384_header;
+			}
+			if(curvetype == (uint8_t)OPTIGA_ECC_CURVE_BRAIN_POOL_P_512R1)
+			{
+				data_offset = sizeof(eccbp512_header);
+				header_pointer = eccbp512_header;
 			}			
 			memcpy(publickeygenerated, header_pointer, data_offset);
 			
@@ -200,7 +227,7 @@ int generatepublickey(uint8_t curvetype)
 		if ( command_queue_status != OPTIGA_LIB_SUCCESS )
 		{
 			//optiga_crypt_ecc_generate_keypair api returns error !!!
-			OPTIGA_CRYPT_LOG_MESSAGE ("optiga_crypt_ecc_generate_keypair api returns error !!!");
+			optiga_lib_print_message("optiga_crypt_ecc_generate_keypair api returns error !!!",OPTIGA_CRYPT_SERVICE,OPTIGA_CRYPT_SERVICE_COLOR);
 			break;
 		}
 
@@ -213,7 +240,7 @@ int generatepublickey(uint8_t curvetype)
 		if ( crypt_event_completed_status != OPTIGA_LIB_SUCCESS )
 		{
 			//optiga_util_open_application failed
-			OPTIGA_CRYPT_LOG_MESSAGE ("Call back status error");
+			optiga_lib_print_message("Call back status error",OPTIGA_CRYPT_SERVICE,OPTIGA_CRYPT_SERVICE_COLOR);
 			printf("%02X", crypt_event_completed_status);
 			break;
 		}
@@ -272,7 +299,7 @@ int generatepublickey(uint8_t curvetype)
             printf("%c", public_key[i]);
         } 
 		printf("\n");
-		OPTIGA_CRYPT_LOG_MESSAGE ("Generate Key Pair successful!!!");
+		optiga_lib_print_message("Generate Key Pair successful!!!",OPTIGA_CRYPT_SERVICE,OPTIGA_CRYPT_SERVICE_COLOR);
 		
 		ret = 0;
 	}while(0);
@@ -343,8 +370,12 @@ static void optiga_personalization(void)
 		printf("\nSelect the key type from below list\n");
 		printf("Press 1 to Generate NIST P-256\n");
 		printf("Press 2 to Generate NIST P-384\n");
-		printf("Press 3 to Generate RSA 1024\n");
-		printf("Press 4 to Generate RSA 2048\n");
+		printf("Press 3 to Generate NIST P-521\n");
+		printf("Press 4 to Generate Brainpool 256 r1\n");
+		printf("Press 5 to Generate Brainpool 384 r1\n");
+		printf("Press 6 to Generate Brainpool 512 r1\n");
+		printf("Press 7 to Generate RSA 1024\n");
+		printf("Press 8 to Generate RSA 2048\n");
 			
 		while (1) 
 		{	
@@ -367,11 +398,35 @@ static void optiga_personalization(void)
 				}
 				else if('3' == (char)data[0])
 				{
+					curvetype = (uint8_t)OPTIGA_ECC_CURVE_NIST_P_521;
+					printf("\nSelected NIST P-521 Curve\n");
+					break;
+				}
+				else if('4' == (char)data[0])
+				{
+					curvetype = (uint8_t)OPTIGA_ECC_CURVE_BRAIN_POOL_P_256R1;
+					printf("\nSelected Brainpool 256 r1 curve\n");
+					break;
+				}
+				else if('5' == (char)data[0])
+				{				
+					curvetype = (uint8_t)OPTIGA_ECC_CURVE_BRAIN_POOL_P_384R1;
+					printf("\nSelected Brainpool 384 r1 curve\n");
+					break;
+				}
+				else if('6' == (char)data[0])
+				{
+					curvetype = (uint8_t)OPTIGA_ECC_CURVE_BRAIN_POOL_P_512R1;
+					printf("\nSelected Brainpool 512 r1 curve\n");
+					break;
+				}
+				else if('7' == (char)data[0])
+				{
 					curvetype = (uint8_t)OPTIGA_RSA_KEY_1024_BIT_EXPONENTIAL;
 					printf("\nSelected RSA 1024\n");
 					break;
 				}
-				else if('4' == (char)data[0])
+				else if('8' == (char)data[0])
 				{
 					curvetype = (uint8_t)OPTIGA_RSA_KEY_2048_BIT_EXPONENTIAL;
 					printf("\nSelected RSA 2048\n");
@@ -382,8 +437,12 @@ static void optiga_personalization(void)
 					printf("Invalid option.Select any below option\n");
 					printf("Press 1 to Generate NIST P-256\n");
 					printf("Press 2 to Generate NIST P-384\n");
-					printf("Press 3 to Generate RSA 1024\n");
-					printf("Press 4 to Generate RSA 2048\n");
+					printf("Press 3 to Generate NIST P-521\n");
+					printf("Press 4 to Generate Brainpool 256 r1\n");
+					printf("Press 5 to Generate Brainpool 384 r1\n");
+					printf("Press 6 to Generate Brainpool 512 r1\n");
+					printf("Press 7 to Generate RSA 1024\n");
+					printf("Press 8 to Generate RSA 2048\n");
 				}
 			}
 		}

@@ -1,9 +1,9 @@
-# Microsoft Azure IoT with Infineon OPTIGA&trade; Trust M 
+# Microsoft Azure IoT with </br> Infineon OPTIGA&trade; Trust M 
 
 * [Introduction](#introduction)
 * [Hardware](#Hardware)
 * [Getting Started](#getting-started)
-  * [Step 1. Download and install missing components](#Step-1-Download-and-install-missing-components )
+  * [Step 1. Download and install missing components](#Step-1-Downlaod-and-install-missing-components )
   * [Step 2. Setting up Microsoft Azure IoT Hub](#Step-2-Setting-up-Microsoft-Azure-IoT-Hub)
   * [Step 3. Configuring and Building Sample](#Step-3-configuring-and-building-sample)
 * [Troubleshooting](#troubleshooting)
@@ -34,7 +34,7 @@ This Application Note uses Espressif ESP32, but it also shows how to port onto a
 
 2. **This repository**
   ``` bash
-  git clone --recursive https://github.com/Infineon/azure-optiga-trust-m
+  git clone --recursive https://github.com/Infineon/azure-optiga-trust-m3.git
   ```
 
 ## Step 2. Setting up Microsoft Azure IoT Hub
@@ -110,15 +110,6 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     ```sh
     idf.py menuconfig
     ```
-- Update the below parameters:
-
-    ![](docs/images/menu_config_3.png)
-    
-    - Select the certificate Slot out of 4 slots provided, where the device certificate is personalized
-    - Select the Private Key slot out of 4 slots provided, where the device private key is personalized
-
-    ![](docs/images/menu_config_4.png)
-
 - Build Personalisation project and Flash ESP32 using below command 
     ```bash	
     idf.py build
@@ -136,12 +127,16 @@ Now it becomes possible to provision your device with a new X.509 certificate an
     idf.py monitor
     ```
 - Choose the type of private key pair to be personalized by selecting from the given option shown below
-  ```bash
-  Press 1 to Generate NIST P-256
-  Press 2 to Generate NIST P-384
-  Press 3 to Generate RSA 1024
-  Press 4 to Generate RSA 2048
-  ```
+	```bash
+	Press 1 to Generate NIST P-256
+	Press 2 to Generate NIST P-384
+	Press 3 to Generate NIST P-521
+	Press 4 to Generate Brainpool 256 r1
+	Press 5 to Generate Brainpool 384 r1
+	Press 6 to Generate Brainpool 512 r1
+	Press 7 to Generate RSA 1024
+	Press 8 to Generate RSA 2048
+	```
 
 * Public Key Extraction</br>
   The demo project starts with generating a new keypair, where the private part stays on the secure element, and the public component   is printed out. You should be able to see something like this
@@ -198,10 +193,6 @@ Now it becomes possible to provision your device with a new X.509 certificate an
 
 ## Step 3. Configuring and Building Sample
 
-- Open the file **"optiga_lib_config.h"** present in the below given path and update the value of macro **"OPTIGA_COMMS_DEFAULT_RESET_TYPE"** to **"1"** 
-    ```sh
-    File path : azure-optiga-trust-m\components\optiga\optiga-trust-m\optiga\include\optiga
-    ```
 - Follow this step only if Server root CA need to be loaded into any of OPTIGA data object.This certficate will be used for Authentication in TLS session. 
     - Comment the macro **-DMBEDTLS_RSA_ALT** from the Cmakelist.txt file present in the path <azure-optiga-trust-m\components\optiga> as shown below
         ```sh
