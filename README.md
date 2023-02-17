@@ -1,3 +1,5 @@
+# This repository is no longer updated and transfered to a new location - [link](https://github.com/Infineon/azure-esp32-optiga-trust/)
+
 # Microsoft Azure IoT with </br> Infineon OPTIGA&trade; Trust M 
 
 * [Introduction](#introduction)
